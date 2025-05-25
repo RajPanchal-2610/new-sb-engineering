@@ -3,6 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
 // function App() {
 //   const [count, setCount] = useState(0)
 
@@ -34,14 +35,31 @@ import './App.css'
 
 // export default App
 
+// function App() {
+//   return (
+//     <div>
+//       <h1>Welcome to New SB Engineering Fabrication Workshop</h1>
+//       <p>We make house grills, gates, and swings with quality and precision.</p>
+//     </div>
+//   );
+// }
+
+// export default App;
+
 function App() {
   return (
-    <div>
-      <h1>Welcome to New SB Engineering Fabrication Workshop</h1>
-      <p>We make house grills, gates, and swings with quality and precision.</p>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
+      <h1 className="text-4xl font-bold text-red-600 mb-4 text-center">
+        Welcome to New SB Engineering Fabrication Workshop
+      </h1>
+      <p className="text-lg text-red-500 max-w-xl text-center">
+        We make house grills, gates, and swings with quality and precision.
+      </p>
     </div>
   );
 }
 
 export default App;
+
+
 
