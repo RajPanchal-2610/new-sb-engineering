@@ -6,18 +6,20 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import OurWork from './pages/OurWork';
+import Places from './pages/Places';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="flex flex-col min-h-screen w-full">
         <Header />
-        <main className="flex-grow w-full mt-16">
+        <main className="flex-grow w-full mt-16"> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/our-work" element={<OurWork />} />
+            <Route path="/places" element={<Places />} />
           </Routes>
         </main>
         <Footer />

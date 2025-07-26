@@ -48,55 +48,77 @@ function Home() {
   return (
     <div className="w-full bg-light-blue">
       {/* Hero Section with Owner - No scroll animation needed as it's visible on load */}
-      <section className="w-full py-20 px-6 bg-gradient-to-b from-navy to-medium-blue text-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="md:w-2/5 mb-8 md:mb-0">
-              <div className="relative animate-[fadeIn_0.8s_ease-out]">
-                <div className="absolute inset-0 bg-light-blue rounded-full transform translate-x-4 translate-y-4"></div>
-                <img 
-                  src="https://randomuser.me/api/portraits/men/75.jpg" 
-                  alt="Robert Johnson - Owner" 
-                  className="relative z-10 w-full max-w-md rounded-full border-4 border-white shadow-xl"
-                />
-              </div>
-            </div>
-            <div className="md:w-3/5">
-              <h1 className="text-4xl md:text-5xl font-bold mb-2 animate-[slideInFromRight_0.5s_ease-out]">
-                New SB Engineering
-              </h1>
-              <h2 className="text-2xl font-semibold text-light-blue mb-4 animate-[slideInFromRight_0.7s_ease-out]">
-                Led by Robert Johnson, Master Craftsman
-              </h2>
-              <p className="text-lg mb-6 animate-[slideInFromRight_0.9s_ease-out]">
-                With over 20 years of experience, Robert Johnson and his team create custom metal fabrications 
-                that combine security, durability, and aesthetic appeal.
-              </p>
-              <p className="text-light-blue italic text-lg mb-6 animate-[slideInFromRight_1.1s_ease-out]">
-                "My passion has always been creating functional art through metalwork. Every piece we create 
-                is designed to not only serve its purpose but to enhance the beauty of your home or business."
-              </p>
-              <div className="flex flex-wrap gap-4 animate-[fadeIn_1.3s_ease-out]">
-                <a 
-                  href="/our-work" 
-                  className="inline-block bg-light-blue text-navy hover:bg-white font-bold py-3 px-8 rounded-lg transition-colors duration-300"
-                >
-                  View Our Work
-                </a>
-                <a 
-                  href="/contact" 
-                  className="inline-block bg-transparent border-2 border-light-blue text-light-blue hover:bg-light-blue hover:text-navy font-bold py-3 px-8 rounded-lg transition-colors duration-300"
-                >
-                  Get a Quote
-                </a>
-              </div>
-            </div>
+        <section className="relative w-full py-12 md:py-32 px-6 bg-gradient-to-b from-navy to-medium-blue text-white overflow-hidden">
+    {/* Background Image Layer */}
+    <div
+      className="absolute inset-0 bg-cover bg-center opacity-15"
+      style={{ backgroundImage: "url('/images/workshop.jpeg')" }}
+    ></div>
+
+    {/* Main Content Layer */}
+    <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="md:w-2/5 md:mb-0">
+          <div className="relative animate-[fadeIn_0.8s_ease-out]">
+
+            <img
+              src="/images/owner.jpeg"
+              alt="Nilesh Panchal - Owner"
+              className="relative z-10 w-full max-w-md rounded-full border-4 border-white shadow-xl animate-zoomFadeIn"
+            />
           </div>
         </div>
-      </section>
+        <div className="md:w-3/5">
+          <h1 className="text-4xl md:text-5xl font-bold mb-2 text-center md:text-left animate-[slideInFromRight_0.5s_ease-out]">
+            New SB Engineering
+          </h1>
+          <h2 className="text-2xl font-semibold text-light-blue mb-8 md:mb-4 text-center md:text-left animate-[slideInFromRight_0.7s_ease-out]">
+            Led by Nilesh R Panchal
+          </h2>
+          <p className="text-lg mb-6 animate-[slideInFromRight_0.9s_ease-out]">
+            With over 20 years of experience, Nilesh Panchal and his team create custom metal fabrications
+            that combine security, durability, and aesthetic appeal.
+          </p>
+          <p className="text-light-blue italic text-lg mb-6 animate-[slideInFromRight_1.1s_ease-out]">
+            "My passion has always been creating functional art through metalwork. Every piece we create
+            is designed to not only serve its purpose but to enhance the beauty of your home or business."
+          </p>
+          <div className="flex flex-wrap justify-center md:justify-start gap-4 animate-[fadeIn_1.3s_ease-out]">
+            <a
+              href="/our-work"
+              className="inline-block bg-light-blue text-navy hover:bg-white font-bold py-3 px-8 rounded-lg transition-colors duration-300"
+            >
+              View Our Work
+            </a>
+            <a
+              href="/contact"
+              className="inline-block bg-transparent border-2 border-light-blue text-light-blue hover:bg-light-blue hover:text-navy font-bold py-3 px-8 rounded-lg transition-colors duration-300"
+            >
+              Get a Quote
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {/* <svg
+    className="absolute bottom-0 left-0 w-full"
+    viewBox="0 0 1440 100"
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="none"
+  >
+    <path
+      fill="white"
+      d="M0,0 C360,100 1080,100 1440,0 L1440,100 L0,100 Z"
+    ></path>
+  </svg> */}
+  </section>
+
+
+
+
 
       {/* Services Overview - with scroll animation */}
-      <section ref={servicesRef} className="w-full py-16 px-6 bg-white opacity-0 translate-y-10 transition-all duration-1000 ease-out">
+      <section ref={servicesRef} className="w-full py-16 px-6 bg-white opacity-0 translate-y-10 transition-all duration-1000 ease-out relative z-10">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-navy mb-8 text-center">Our Expertise</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -146,74 +168,77 @@ function Home() {
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1530603907829-659ab5ec057b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                  alt="Decorative Gate" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-navy mb-2">Luxury Estate Gate</h3>
-                <p className="text-medium-blue mb-4">
-                  Custom-designed entrance gate with intricate scrollwork for a luxury estate in Beverly Hills.
-                </p>
-                <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
-                  View Details
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
+          <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
+  <div className="relative h-64 overflow-hidden">
+    <img 
+      src="/images/swing-1.jpeg" 
+      alt="Metal Swing" 
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+    <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
+  </div>
+  <div className="p-6">
+    <h3 className="text-xl font-bold text-navy mb-2">Swing</h3>
+    <p className="text-medium-blue mb-4">
+      Crafted for comfort and style, this swing is designed for both indoor and outdoor use, featuring rust-proof joints and elegant finishing.
+    </p>
+    <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
+      View Details
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>
+
             
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1555505019-8c3f1c4aba5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                  alt="Window Grill" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-navy mb-2">Modern Window Grills</h3>
-                <p className="text-medium-blue mb-4">
-                  Contemporary window grills with geometric patterns for a modern apartment complex.
-                </p>
-                <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
-                  View Details
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
+<div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
+  <div className="relative h-64 overflow-hidden">
+    <img 
+      src="/images/gate-1.jpeg" 
+      alt="Main Gate" 
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+    <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
+  </div>
+  <div className="p-6">
+    <h3 className="text-xl font-bold text-navy mb-2">Main Gate</h3>
+    <p className="text-medium-blue mb-4">
+      A heavy-duty designer gate crafted from premium-grade materials, offering both elegance and maximum security for your home entrance.
+    </p>
+    <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
+      View Details
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>
+
             
-            <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                  alt="Staircase Railing" 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-navy mb-2">Spiral Staircase Railing</h3>
-                <p className="text-medium-blue mb-4">
-                  Custom spiral staircase railing with brass accents for a historic building renovation.
-                </p>
-                <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
-                  View Details
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </a>
-              </div>
-            </div>
+<div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-duration-300 group">
+  <div className="relative h-64 overflow-hidden">
+    <img 
+      src="/images/mandir-shikhar-1.jpeg" 
+      alt="Mandir Shikhar" 
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+    <div className="absolute inset-0 bg-navy bg-opacity-20 group-hover:bg-opacity-0 transition-all duration-300"></div>
+  </div>
+  <div className="p-6">
+    <h3 className="text-xl font-bold text-navy mb-2">Mandir Shikhar</h3>
+    <p className="text-medium-blue mb-4">
+      Intricately crafted Mandir Shikhar with traditional carvings, bringing sacred aesthetics and precision engineering together.
+    </p>
+    <a href="/our-work" className="text-medium-blue font-semibold hover:text-navy transition-colors duration-300 flex items-center">
+      View Details
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+      </svg>
+    </a>
+  </div>
+</div>
+
           </div>
           
           <div className="text-center mt-10">

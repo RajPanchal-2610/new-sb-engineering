@@ -1,102 +1,68 @@
 import { useState } from 'react';
+import { X } from "lucide-react";
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
+
+
 
 function OurWork() {
-  const [activeCategory, setActiveCategory] = useState('all');
-  
-  // Sample project data - replace with your actual projects
+const [activeCategory, setActiveCategory] = useState('all');
+const [selectedImage, setSelectedImage] = useState(null);
+const [isModalOpen, setIsModalOpen] = useState(false);
+
+const openModal = (image) => {
+  setSelectedImage(image);
+  setIsModalOpen(true);
+};
+
+const closeModal = () => {
+  setIsModalOpen(false);
+  setSelectedImage(null);
+};
+
   const projects = [
-    {
-      id: 1,
-      title: "Modern Entrance Gate",
-      category: "main-gate",
-      image: "https://images.unsplash.com/photo-1558036117-15d82a90b9b1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Custom-designed modern entrance gate with geometric patterns."
-    },
-    {
-      id: 2,
-      title: "Decorative Window Grill",
-      category: "house-grills",
-      image: "https://images.unsplash.com/photo-1555505019-8c3f1c4aba5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Elegant window grill with floral design elements."
-    },
-    {
-      id: 3,
-      title: "Spiral Staircase Railing",
-      category: "stair-railings",
-      image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Custom spiral staircase railing with intricate details."
-    },
-    {
-      id: 4,
-      title: "Garden Swing",
-      category: "swings",
-      image: "https://images.unsplash.com/photo-1597767411689-c38a3bf89ec0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Durable and comfortable garden swing with decorative elements."
-    },
-    {
-      id: 5,
-      title: "Balcony Railing",
-      category: "balcony-railings",
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Modern balcony railing with glass panels and metal frame."
-    },
-    {
-      id: 6,
-      title: "Terrace Safety Railing",
-      category: "terrace-railings",
-      image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Stylish yet secure terrace railing with panoramic views."
-    },
-    {
-      id: 7,
-      title: "Coffee Table Frame",
-      category: "furniture-frames",
-      image: "https://images.unsplash.com/photo-1581428982868-e410dd047a90?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Custom metal frame for a glass-top coffee table."
-    },
-    {
-      id: 8,
-      title: "Decorative Main Gate",
-      category: "main-gate",
-      image: "https://images.unsplash.com/photo-1545176120-2550fb027b13?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Ornate main gate with traditional design elements."
-    },
-    {
-      id: 9,
-      title: "Security Window Grill",
-      category: "house-grills",
-      image: "https://images.unsplash.com/photo-1614159102522-43c67ece6f93?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Secure window grill with modern aesthetic appeal."
-    },
-    {
-      id: 10,
-      title: "Indoor Swing",
-      category: "swings",
-      image: "https://images.unsplash.com/photo-1596900779744-2bdc4a90509a?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Elegant indoor swing for living room or covered patio."
-    },
-    {
-      id: 11,
-      title: "Dining Table Frame",
-      category: "furniture-frames",
-      image: "https://images.unsplash.com/photo-1577140917170-285929fb55b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Sturdy metal frame for a large dining table."
-    },
-    {
-      id: 12,
-      title: "Curved Staircase Railing",
-      category: "stair-railings",
-      image: "https://images.unsplash.com/photo-1591005493328-11207150b390?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      description: "Elegant curved railing for a grand staircase."
-    }
+    { id: 1, category: "main-gate", image: "/images/gate-1.jpeg" },
+    { id: 2, category: "main-gate", image: "/images/gate-2.jpeg" },
+    { id: 3, category: "main-gate", image: "/images/gate-3.jpeg" },
+    { id: 4, category: "main-gate", image: "/images/gate-4.jpeg" },
+
+    { id: 5, category: "house-grills", image: "https://images.unsplash.com/photo-1555505019-8c3f1c4aba5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" },
+    { id: 6, category: "house-grills", image: "https://images.unsplash.com/photo-1614159102522-43c67ece6f93?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" },
+
+    { id: 7, category: "stair-railings", image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" },
+    { id: 8, category: "stair-railings", image: "https://images.unsplash.com/photo-1591005493328-11207150b390?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" },
+
+   
+    { id: 9, category: "swings", image: "/images/swing-1.jpeg" },
+    { id: 10, category: "swings", image: "/images/swing-2.jpeg" },
+    { id: 11, category: "swings", image: "/images/swing-3.jpeg" },
+    { id: 12, category: "swings", image: "/images/swing-4.jpeg" },
+    { id: 13, category: "swings", image: "/images/swing-5.jpeg" },
+    { id: 14, category: "swings", image: "/images/swing-6.jpeg" },
+    { id: 15, category: "swings", image: "/images/swing-7.jpeg" },
+    { id: 16, category: "swings", image: "/images/swing-8.jpeg" },
+
+    { id: 17, category: "balcony-railings", image: "/images/balcony-railing-1.jpeg" },
+    { id: 18, category: "balcony-railings", image: "/images/balcony-railing-2.jpeg" },
+    { id: 19, category: "balcony-railings", image: "/images/balcony-railing-3.jpeg" },
+
+    { id: 20, category: "terrace-railings", image: "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" },
+    { id: 21, category: "mandir-shikhar", image: "/images/mandir-shikhar-1.jpeg" },
+    { id: 22, category: "mandir-shikhar", image: "/images/mandir-shikhar-2.jpeg" },
+    { id: 23, category: "mandir-shikhar", image: "/images/mandir-shikhar-3.jpeg" },
+
+    { id: 24, category: "shades", image: "/images/shade-1.jpeg" },
+
+    { id: 25, category: "others", image: "/images/other-1.jpeg" },
+    { id: 26, category: "others", image: "/images/other-2.jpeg" },
+
+    
   ];
-  
-  // Filter projects based on active category
-  const filteredProjects = activeCategory === 'all' 
-    ? projects 
-    : projects.filter(project => project.category === activeCategory);
-  
-  // Categories for filter buttons
+
+  const filteredProjects = activeCategory === 'all'
+    ? projects
+    : projects.filter(p => p.category === activeCategory);
+
   const categories = [
     { id: 'all', label: 'All Projects' },
     { id: 'main-gate', label: 'Main Gates' },
@@ -105,85 +71,100 @@ function OurWork() {
     { id: 'balcony-railings', label: 'Balcony Railings' },
     { id: 'terrace-railings', label: 'Terrace Railings' },
     { id: 'swings', label: 'Swings' },
-    { id: 'furniture-frames', label: 'Furniture Frames' }
+    { id: 'mandir-shikhar', label: 'Mandir Shikhar' },
+    { id: 'shades', label: 'Shades' },
+    { id: 'others', label: 'Others' }
   ];
 
   return (
-    <div className="w-full bg-light-blue p-6">
+    <div className="w-full bg-light-blue p-3 sm:p-6 min-h-screen">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-navy mb-4 page-title">Our Work</h1>
-        <p className="text-lg text-dark-blue mb-8">
-          Browse through our portfolio of custom metal fabrication projects. 
-          Use the filters below to view specific categories of our work.
-        </p>
-        
-        {/* Category Filter Buttons */}
-        <div className="mb-8 overflow-x-auto">
-          <div className="flex space-x-2 pb-2">
-            {categories.map(category => (
-              <button
-                key={category.id}
-                onClick={() => setActiveCategory(category.id)}
-                className={`px-4 py-2 rounded-md whitespace-nowrap transition-colors duration-300 ${
-                  activeCategory === category.id
-                    ? 'bg-navy text-white'
-                    : 'bg-white text-navy hover:bg-medium-blue hover:text-white'
-                }`}
-              >
-                {category.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map(project => (
-            <div 
-              key={project.id} 
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+        <h1 className="text-4xl font-bold text-navy mb-4">Our Work</h1>
+
+        {/* Filter buttons */}
+        <div className="flex gap-3 mb-8 overflow-x-auto sm:overflow-x-visible whitespace-nowrap sm:flex-wrap scrollbar-hide">
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                activeCategory === cat.id
+                  ? 'bg-navy text-white'
+                  : 'bg-white text-navy hover:bg-medium-blue hover:text-white'
+              }`}
             >
-              <div className="relative h-64 overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Grid layout */} 
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {filteredProjects.map(project => (
+            <div
+              key={project.id}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 p-2 sm:p-5 mx-auto w-full max-w-[260px] lg:max-w-[350px] 
+                        lg:max-h-[480px]" // 👈 controls overall height on large screens
+            >
+              {/* Image Wrapper */}
+              <div className="aspect-[3/4] sm:aspect-auto sm:h-[300px] lg:h-[330px] overflow-hidden rounded-xl mb-3">
+                <img
+                  src={project.image}
+                  alt={project.category}
+                  className="w-full h-full rounded-xl object-cover transition-transform duration-500 hover:scale-105"
                 />
-                <div className="absolute bottom-0 left-0 bg-navy bg-opacity-80 text-white px-3 py-1 text-sm">
-                  {categories.find(cat => cat.id === project.category)?.label}
-                </div>
               </div>
-              <div className="p-4">
-                <h3 className="text-xl font-bold text-dark-blue mb-2">{project.title}</h3>
-                <p className="text-medium-blue">{project.description}</p>
+
+              {/* Button */}
+              <div>
+                <button
+                  className="w-full bg-dark-blue text-white py-2 sm:py-3 rounded-full text-sm hover:bg-medium-blue transition"
+                  onClick={() => openModal(project.image)}
+                >
+                  View
+                </button>
               </div>
             </div>
           ))}
         </div>
-        
-        {/* No Results Message */}
-        {filteredProjects.length === 0 && (
-          <div className="text-center py-12">
-            <h3 className="text-xl font-bold text-navy mb-2">No projects found</h3>
-            <p className="text-medium-blue">
-              We don't have any projects in this category yet. Please check back later or select another category.
-            </p>
+
+
+
+
+
+
+          {isModalOpen && ( 
+            <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center">
+              <div className="bg-white text-dark-blue rounded-xl p-4 w-[90%] max-w-xl relative shadow-2xl">
+                {/* Close Button */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-3 right-3 bg-dark-blue text-white hover:bg-navy rounded-full w-9 h-9 flex items-center justify-center shadow-md"
+                >
+                  <X className="w-5 h-5" />
+              </button>
+
+
+              {/* Fixed size image */}
+              <div className="flex justify-center items-center">
+              <Zoom  className="rounded 2xl">
+                <img
+                  src={selectedImage}
+                  alt="Full View"
+                  className="object-contain w-[400px] h-[300px] sm:w-[500px] sm:h-[400px] rounded-2xl"
+                />
+              </Zoom>
+              </div>
+            </div>
           </div>
         )}
-        
-        {/* Call to Action */}
-        <div className="mt-12 bg-navy text-white p-6 rounded-lg text-center">
-          <h2 className="text-2xl font-bold mb-2">Have a project in mind?</h2>
-          <p className="text-light-blue mb-4">
-            Contact us today to discuss your custom fabrication needs. We'll help bring your vision to life.
-          </p>
-          <a 
-            href="/contact" 
-            className="inline-block bg-medium-blue hover:bg-light-blue hover:text-navy text-white font-bold py-2 px-6 rounded-md transition-colors duration-300"
-          >
-            Get a Quote
-          </a>
-        </div>
+
+        {filteredProjects.length === 0 && (
+          <div className="text-center mt-20">
+            <h3 className="text-xl text-navy font-semibold mb-2">No projects found</h3>
+            <p className="text-medium-blue">Try another category or check back soon.</p>
+          </div>
+        )}
       </div>
     </div>
   );
