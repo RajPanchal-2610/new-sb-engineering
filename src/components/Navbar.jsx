@@ -1,280 +1,145 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const routes = ['/', '/our-work', '/about', '/contact', '/places'];
+  const labels = ['Home', 'Our Work', 'About', 'Contact', 'Places'];
+
   return (
-    <nav 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? 'bg-navy shadow-lg py-2' : 'bg-dark-blue py-4'
-      }`}
-    >
-      <div className="container mx-auto px-19 sm:px-20">
-      <div className="flex justify-between items-center flex-wrap gap-2 sm:gap-4">
-  {/* Logo Section */}
-  <Link 
-    to="/" 
-    className="text-xl sm:text-2xl font-bold text-white hover:text-light-blue transition-colors duration-300 px-2"
-  >
-    <div className="flex items-center gap-1 sm:gap-2 transform hover:scale-105 transition-transform duration-300 flex-wrap">
-      <span className="text-base sm:text-xl">New</span>
-      <img 
-        src="/images/logo.png" 
-        alt="New SB Engineering Logo" 
-        className="h-8 sm:h-10 w-auto" // responsive height
-      />
-      <span className="text-base sm:text-xl">Engineering</span>
-    </div>
-  </Link>
+    <nav className={`fixed top-0 w-full z-50 shadow-card transition-all duration-300 ease-in-out-expo ${
+      menuOpen ? 'bg-white' : 'bg-black'
+    }`}>
+      <div className="container mx-auto px-4 sm:px-6">
+        {/* Navbar Top Row (Hidden when menuOpen is true) */}
+        {!menuOpen && (
+          <div className="flex justify-between items-center flex-wrap gap-2 sm:gap-4 py-4">
+            {/* Logo */}
+            <Link
+              to="/"
+              className="text-xl sm:text-2xl font-bold text-white transition-colors duration-300 px-2"
+            >
+              <div className="flex items-center gap-1 sm:gap-2 transform hover:scale-105 transition-transform duration-300 ease-in-out-expo">
+                <span className="text-base sm:text-xl">New</span>
+                <img
+                  src="/images/logo.png"
+                  alt="New SB Engineering Logo"
+                  className="h-8 sm:h-10 w-auto"
+                />
+                <span className="text-base sm:text-xl">Engineering</span>
+              </div>
+            </Link>
 
-  {/* Mobile menu button */}
-  <button 
-    className="md:hidden text-white focus:outline-none px-2"
-    onClick={toggleMenu}
-  >
-    <svg 
-      className="w-6 h-6" 
-      fill="none" 
-      stroke="currentColor" 
-      viewBox="0 0 24 24" 
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {menuOpen ? (
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-      ) : (
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-      )}
-    </svg>
-  </button>
+            {/* Hamburger */}
+            <button
+              className="md:hidden text-white focus:outline-none px-2"
+              onClick={toggleMenu}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
-            <NavLink 
-              to="/" 
-              className={({ isActive }) => 
-                `relative px-2 py-1 text-lg transition-all duration-300 ${
-                  isActive 
-                    ? 'text-light-blue font-semibold' 
-                    : 'text-white hover:text-light-blue'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Home
-                  <span 
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-light-blue transform transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
-                    }`}
-                  ></span>
-                </>
-              )}
-            </NavLink>
-            <NavLink 
-              to="/our-work" 
-              className={({ isActive }) => 
-                `relative px-2 py-1 text-lg transition-all duration-300 ${
-                  isActive 
-                    ? 'text-light-blue font-semibold' 
-                    : 'text-white hover:text-light-blue'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Our Work
-                  <span 
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-light-blue transform transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
-                    }`}
-                  ></span>
-                </>
-              )}
-            </NavLink>
-            <NavLink 
-              to="/about" 
-              className={({ isActive }) => 
-                `relative px-2 py-1 text-lg transition-all duration-300 ${
-                  isActive 
-                    ? 'text-light-blue font-semibold' 
-                    : 'text-white hover:text-light-blue'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  About
-                  <span 
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-light-blue transform transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
-                    }`}
-                  ></span>
-                </>
-              )}
-            </NavLink>
-            <NavLink 
-              to="/contact" 
-              className={({ isActive }) => 
-                `relative px-2 py-1 text-lg transition-all duration-300 ${
-                  isActive 
-                    ? 'text-light-blue font-semibold' 
-                    : 'text-white hover:text-light-blue'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Contact
-                  <span 
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-light-blue transform transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
-                    }`}
-                  ></span>
-                </>
-              )}
-            </NavLink>
-            <NavLink 
-              to="/places" 
-              className={({ isActive }) => 
-                `relative px-2 py-1 text-lg transition-all duration-300 ${
-                  isActive 
-                    ? 'text-light-blue font-semibold' 
-                    : 'text-white hover:text-light-blue'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  Places
-                  <span 
-                    className={`absolute bottom-0 left-0 w-full h-0.5 bg-light-blue transform transition-transform duration-300 ${
-                      isActive ? 'scale-x-100' : 'scale-x-0 hover:scale-x-100'
-                    }`}
-                  ></span>
-                </>
-              )}
-            </NavLink>
+{/* Capsule Navigation - Desktop Only */}
+<div className="hidden md:flex relative items-center space-x-1">
+  <div className="relative flex bg-transparent rounded-full p-0.5">
+    {routes.map((path, i) => (
+      <NavLink
+        key={path}
+        to={path}
+        className={({ isActive }) =>
+          `relative z-10 px-5 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ease-in-out-expo transform ${
+            isActive
+              ? 'text-black'
+              : 'text-white hover:scale-125'
+          }`
+        }
+      >
+        {({ isActive }) => (
+          <>
+            {isActive && (
+              <span className="absolute inset-0 bg-white rounded-full shadow-md z-[-1] transition-all duration-300 ease-in-out-expo scale-100"></span>
+            )}
+            {labels[i]}
+          </>
+        )}
+      </NavLink>
+    ))}
+  </div>
+</div>
+
+
+
 
 
           </div>
-        </div>
+        )}
 
-        {/* Mobile Navigation */}
-        <div 
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            menuOpen ? 'max-h-65 opacity-100 mt-4' : 'max-h-0 opacity-0'
-          }`}
-        >
-          <div className="flex flex-col space-y-4 py-4">
-            <NavLink 
-              to="/" 
-              className={({ isActive }) => 
-                `px-4 py-2 text-lg transition-colors duration-300 ${
-                  isActive 
-                    ? 'bg-navy text-light-blue font-semibold rounded-md' 
-                    : 'text-white hover:bg-navy hover:text-light-blue rounded-md'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
+        {/* Mobile Menu Open */}
+        {menuOpen && (
+        <div className="py-6 space-y-6 relative">
+          {/* Close Button */}
+          <button
+            onClick={() => setMenuOpen(false)}
+            className="absolute top-2 right-4 text-black hover:text-accent transition-colors duration-300"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
             >
-              Home
-            </NavLink>
-            <NavLink 
-              to="/our-work" 
-              className={({ isActive }) => 
-                `px-4 py-2 text-lg transition-colors duration-300 ${
-                  isActive 
-                    ? 'bg-navy text-light-blue font-semibold rounded-md' 
-                    : 'text-white hover:bg-navy hover:text-light-blue rounded-md'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              Our Work
-            </NavLink>
-            <NavLink 
-              to="/about" 
-              className={({ isActive }) => 
-                `px-4 py-2 text-lg transition-colors duration-300 ${
-                  isActive 
-                    ? 'bg-navy text-light-blue font-semibold rounded-md' 
-                    : 'text-white hover:bg-navy hover:text-light-blue rounded-md'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              About
-            </NavLink>
-            <NavLink 
-              to="/contact" 
-              className={({ isActive }) => 
-                `px-4 py-2 text-lg transition-colors duration-300 ${
-                  isActive 
-                    ? 'bg-navy text-light-blue font-semibold rounded-md' 
-                    : 'text-white hover:bg-navy hover:text-light-blue rounded-md'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact
-            </NavLink>
-            <NavLink 
-              to="/places" 
-              className={({ isActive }) => 
-                `px-4 py-2 text-lg transition-colors duration-300 ${
-                  isActive 
-                    ? 'bg-navy text-light-blue font-semibold rounded-md' 
-                    : 'text-white hover:bg-navy hover:text-light-blue rounded-md'
-                }`
-              }
-              onClick={() => setMenuOpen(false)}
-            >
-              Places
-            </NavLink>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+            {/* Centered Logo / Title */}
+            <div className="flex justify-center items-center gap-2">
+              <span className="text-xl font-bold text-black">New</span>
+              <img
+                src="/images/logo2.png"
+                alt="New SB Engineering Logo"
+                className="h-8 w-auto"
+              />
+              <span className="text-xl font-bold text-black">Engineering</span>
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="flex flex-col space-y-4 px-4">
+              {routes.map((path, i) => (
+                <NavLink
+                  key={path}
+                  to={path}
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `block px-4 py-3 text-lg text-center rounded-md transition-all duration-300 ease-in-out-expo ${
+                      isActive
+                        ? 'bg-gray-100 text-accent font-semibold shadow-card'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-accent hover:shadow-hover'
+                    }`
+                  }
+                >
+                  {labels[i]}
+                </NavLink>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
 }
 
 export default Navbar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

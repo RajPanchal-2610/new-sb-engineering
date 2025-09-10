@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@config "../tailwind.config.js";
 
 body {
   margin: 0;
@@ -96,6 +96,29 @@ section.visible {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* Custom animation class triggered by Intersection Observer */
+.animate {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 10s linear infinite;
+}
+
+
 
 
 
