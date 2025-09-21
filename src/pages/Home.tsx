@@ -176,7 +176,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
 
 
       {/* Our Expertise Section */}
-      <section className="w-full py-16 px-6 -mt-90 lg:-mt-100 bg-white relative z-10">
+      <section className="w-full py-16 px-6 -mt-120 lg:-mt-100 bg-white relative z-10">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-black mb-12 text-center">
             Our Expertise
