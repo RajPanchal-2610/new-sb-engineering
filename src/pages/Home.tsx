@@ -176,144 +176,57 @@ const stickyContainer = useRef<HTMLDivElement>(null);
 
 
       {/* Our Expertise Section */}
-      <motion.section 
-        className="w-full py-16 px-6 -mt-135 lg:-mt-100 bg-white relative z-10"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, margin: "-100px" }}
-      >
-        <div className="max-w-6xl mx-auto overflow-hidden">
-          <motion.h2 
-            className="text-3xl font-bold text-black mb-12 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
+      <section className="w-full py-16 px-6 -mt-90 lg:-mt-100 bg-white relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-black mb-12 text-center">
             Our Expertise
-          </motion.h2>
+          </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <motion.div 
-              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
-              initial={{ opacity: 0, x: -50, y: 30 }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            >
-              <motion.div 
-                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
-                initial={{ scale: 0, rotate: -180 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-                viewport={{ once: true }}
-              >
+            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group">
+              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-              </motion.div>
-              <motion.h3 
-                className="text-xl font-bold text-black mb-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.7 }}
-                viewport={{ once: true }}
-              >
+              </div>
+              <h3 className="text-xl font-bold text-black mb-2">
                 Custom Gates
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.8 }}
-                viewport={{ once: true }}
-              >
+              </h3>
+              <p className="text-gray-600">
                 Secure and elegant entrance gates designed to enhance your property's appearance while providing security.
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
             
-            <motion.div 
-              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            >
-              <motion.div 
-                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
-                initial={{ scale: 0, rotate: -180 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
-                viewport={{ once: true }}
-              >
+            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group">
+              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                 </svg>
-              </motion.div>
-              <motion.h3 
-                className="text-xl font-bold text-black mb-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.9 }}
-                viewport={{ once: true }}
-              >
+              </div>
+              <h3 className="text-xl font-bold text-black mb-2">
                 Window Grills
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 1.0 }}
-                viewport={{ once: true }}
-              >
+              </h3>
+              <p className="text-gray-600">
                 Decorative and protective window grills that add character to your home while ensuring safety.
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
             
-            <motion.div 
-              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
-              initial={{ opacity: 0, x: 50, y: 30 }}
-              whileInView={{ opacity: 1, x: 0, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            >
-              <motion.div 
-                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
-                initial={{ scale: 0, rotate: -180 }}
-                whileInView={{ scale: 1, rotate: 0 }}
-                transition={{ duration: 0.5, delay: 0.9, ease: "easeOut" }}
-                viewport={{ once: true }}
-              >
+            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group">
+              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
-              </motion.div>
-              <motion.h3 
-                className="text-xl font-bold text-black mb-2"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 1.1 }}
-                viewport={{ once: true }}
-              >
+              </div>
+              <h3 className="text-xl font-bold text-black mb-2">
                 Railings
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 1.2 }}
-                viewport={{ once: true }}
-              >
+              </h3>
+              <p className="text-gray-600">
                 Stylish and sturdy railings for staircases, balconies, and terraces that combine safety with elegance.
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Featured Projects - with scroll animation */}
       {/* <section ref={projectsRef} className="w-full py-16 px-6 bg-gray-100 translate-y-10 transition-all duration-1000 ease-in-out-expo">
