@@ -183,7 +183,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto overflow-hidden">
           <motion.h2 
             className="text-3xl font-bold text-black mb-12 text-center"
             initial={{ opacity: 0, y: 30 }}
