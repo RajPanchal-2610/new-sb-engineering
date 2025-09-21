@@ -153,7 +153,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
         transition={{ duration: 0.8 }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <div ref={stickyContainer} className="relative bg-gray-100 flex w-full flex-col items-center justify-center pb-[100vh]">
+        <div ref={stickyContainer} className="relative flex w-full flex-col items-center justify-center pb-[100vh]">
           <div>
         <h2 className="text-3xl font-bold text-black text-center pt-10 -mb-20">Our Popular Projects</h2>
 
