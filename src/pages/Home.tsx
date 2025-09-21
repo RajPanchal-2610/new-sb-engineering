@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import ReactLenis from 'lenis/react';
 import { StickyCard_001 } from '../components/ui/skiper-ui/skiper16';
 
 function Home() {
@@ -60,61 +61,98 @@ const stickyContainer = useRef<HTMLDivElement>(null);
     };
   }, []);
   
+  
   return (
-    <div className="w-full">
-      {/* Hero Section with Owner - No scroll animation needed as it's visible on load */}
-      <section className="w-full py-16 px-4 sm:px-6 bg-white">
+    <ReactLenis root>
+      <div className="w-full">
+      {/* Hero Section with Owner */}
+      <motion.section 
+        className="w-full py-16 px-4 sm:px-6 bg-white"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center justify-between gap-10">
           
-          {/* Image slides in from right */}
-          <div className="w-full md:w-1/2 flex justify-center animate-slideInRight">
+          <motion.div 
+            className="w-full md:w-1/2 flex justify-center"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
             <div className="group w-[300px] sm:w-[340px] md:w-[420px] h-[380px] sm:h-[440px] md:h-[520px] flex items-center justify-center overflow-hidden transform perspective-1000 relative">
-              {/* <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 z-50  px-4 py-2 rounded-lg">
-                <h3 className="text-5xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold sm:font-extrabold md:font-black text-black text-center">Nilesh Panchal</h3>
-              </div>   */}
               <img
                 src="/images/owner-2.png"
                 alt="Nilesh Panchal - Owner"
                 className="w-full h-full object-cover object-top transition-transform duration-500 ease-in-out group-hover:-translate-z-20"
               />
             </div>
-          </div>
+          </motion.div>
 
-          {/* Text slides in from left */}
-          <div className="w-full md:w-1/2 space-y-5 text-center md:text-left animate-slideInLeft">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+          <motion.div 
+            className="w-full md:w-1/2 space-y-5 text-center md:text-left"
+            initial={{ opacity: 0, x: -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          >
+            <motion.h1 
+              className="text-3xl sm:text-4xl md:text-5xl font-bold"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               New SB Engineering
-            </h1>
-            <h2 className="text-xl sm:text-2xl font-semibold text-gray-800">
+            </motion.h1>
+            <motion.h2 
+              className="text-xl sm:text-2xl font-semibold text-gray-800"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+            >
               Led by Nilesh R. Panchal
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700">
+            </motion.h2>
+            <motion.p 
+              className="text-base sm:text-lg text-gray-700"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
+            >
               With over 20 years of experience, Nilesh Panchal and his team create custom metal fabrications
               that combine security, durability, and aesthetic appeal.
-            </p>
-            <p className="italic text-gray-600 text-base sm:text-lg">
+            </motion.p>
+            <motion.p 
+              className="italic text-gray-600 text-base sm:text-lg"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.2 }}
+            >
               "My passion has always been creating functional art through metalwork. Every piece we create
               is designed to not only serve its purpose but to enhance the beauty of your home or business."
-            </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
+            </motion.p>
+            <motion.div 
+              className="flex flex-wrap justify-center md:justify-start gap-4 pt-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.4 }}
+            >
               <a
                 href="/our-work"
                 className="inline-block bg-black text-white hover:bg-gray-800 font-bold py-3 px-6 sm:px-8 rounded-full transition-colors duration-300 shadow-md"
               >
                 View Our Work
               </a>
-              <a
-                href="/contact"
-                className="inline-block border-2 border-black text-black hover:bg-black hover:text-white font-bold py-3 px-6 sm:px-8 rounded-full transition-colors duration-300"
-              >
-                Get a Quote
-              </a>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="w-full">
+      <motion.section 
+        className="w-full"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div ref={stickyContainer} className="relative bg-gray-100 flex w-full flex-col items-center justify-center pb-[100vh]">
           <div>
         <h2 className="text-3xl font-bold text-black text-center pt-10 -mb-20">Our Popular Projects</h2>
@@ -134,50 +172,148 @@ const stickyContainer = useRef<HTMLDivElement>(null);
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
 
-      {/* Services Overview - with scroll animation */}
-      <section ref={servicesRef} className="w-full py-16 px-6 -mt-150 bg-white opacity-0 translate-y-10 transition-all duration-1000 ease-in-out-expo relative z-10">
+      {/* Our Expertise Section */}
+      <motion.section 
+        className="w-full py-16 px-6 -mt-150 lg:-mt-100 bg-white relative z-10"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-black mb-8 text-center">Our Expertise</h2>
+          <motion.h2 
+            className="text-3xl font-bold text-black mb-12 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Our Expertise
+          </motion.h2>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 ease-in-out-expo text-center">
-              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
+            <motion.div 
+              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
+              initial={{ opacity: 0, x: -50, y: 30 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
+                viewport={{ once: true }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-black mb-2">Custom Gates</h3>
-              <p className="text-gray-600">
+              </motion.div>
+              <motion.h3 
+                className="text-xl font-bold text-black mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.7 }}
+                viewport={{ once: true }}
+              >
+                Custom Gates
+              </motion.h3>
+              <motion.p 
+                className="text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.8 }}
+                viewport={{ once: true }}
+              >
                 Secure and elegant entrance gates designed to enhance your property's appearance while providing security.
-              </p>
-            </div>
-            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 ease-in-out-expo text-center">
-              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
+              </motion.p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: "easeOut" }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, delay: 0.7, ease: "easeOut" }}
+                viewport={{ once: true }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-black mb-2">Window Grills</h3>
-              <p className="text-gray-600">
+              </motion.div>
+              <motion.h3 
+                className="text-xl font-bold text-black mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.9 }}
+                viewport={{ once: true }}
+              >
+                Window Grills
+              </motion.h3>
+              <motion.p 
+                className="text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.0 }}
+                viewport={{ once: true }}
+              >
                 Decorative and protective window grills that add character to your home while ensuring safety.
-              </p>
-            </div>
-            <div className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 ease-in-out-expo text-center">
-              <div className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center">
+              </motion.p>
+            </motion.div>
+            
+            <motion.div 
+              className="bg-gray-100 p-8 rounded-lg shadow-card hover:shadow-hover transition-all duration-300 text-center group"
+              initial={{ opacity: 0, x: 50, y: 30 }}
+              whileInView={{ opacity: 1, x: 0, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7, ease: "easeOut" }}
+              viewport={{ once: true }}
+              whileHover={{ y: -5, transition: { duration: 0.2 } }}
+            >
+              <motion.div 
+                className="w-20 h-20 mx-auto mb-4 bg-black rounded-full flex items-center justify-center"
+                initial={{ scale: 0, rotate: -180 }}
+                whileInView={{ scale: 1, rotate: 0 }}
+                transition={{ duration: 0.5, delay: 0.9, ease: "easeOut" }}
+                viewport={{ once: true }}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
                 </svg>
-              </div>
-              <h3 className="text-xl font-bold text-black mb-2">Railings</h3>
-              <p className="text-gray-600">
+              </motion.div>
+              <motion.h3 
+                className="text-xl font-bold text-black mb-2"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.1 }}
+                viewport={{ once: true }}
+              >
+                Railings
+              </motion.h3>
+              <motion.p 
+                className="text-gray-600"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 1.2 }}
+                viewport={{ once: true }}
+              >
                 Stylish and sturdy railings for staircases, balconies, and terraces that combine safety with elegance.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Projects - with scroll animation */}
       {/* <section ref={projectsRef} className="w-full py-16 px-6 bg-gray-100 translate-y-10 transition-all duration-1000 ease-in-out-expo">
@@ -267,18 +403,21 @@ const stickyContainer = useRef<HTMLDivElement>(null);
         </div>
       </section> */}
 
-<section
+<motion.section
         ref={highlightsRef}
-        className="w-full py-16 bg-white overflow-hidden opacity-0 translate-y-10 transition-all duration-1000 ease-in-out-expo"
+        className="w-full py-16 bg-white overflow-hidden"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, margin: "-100px" }}
       >
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4 overflow-hidden">
           <h2 className="text-3xl font-bold text-center text-black mb-8">
             Highlights of Our Creations
           </h2>
 
           <div className="relative w-full overflow-hidden">
-            <div className="flex animate-marquee space-x-8">
-              {/* Original Images */}
+            <div className="flex animate-marquee space-x-8 w-max">
               {[
                 '/images/swing-1.jpeg',
                 '/images/swing-2.jpeg',
@@ -295,7 +434,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                 />
               ))}
 
-              {/* Duplicate the same images for seamless loop */}
+
               {[
                 '/images/swing-1.jpeg',
                 '/images/swing-2.jpeg',
@@ -314,19 +453,39 @@ const stickyContainer = useRef<HTMLDivElement>(null);
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Process Section - with scroll animation */}
-      <section ref={processRef} className="w-full py-16 px-6 bg-white opacity-0 translate-y-10 transition-all duration-1000 ease-in-out-expo">
+      <motion.section 
+        ref={processRef} 
+        className="w-full py-16 px-6 bg-white"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-black mb-8 text-center">Our Process</h2>
-          <div className="relative">
-            {/* Process Timeline Line */}
+          <motion.h2 
+            className="text-3xl font-bold text-black mb-8 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            Our Process
+          </motion.h2>
+          <div className="relative overflow-hidden">
             <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gray-400 transform -translate-x-1/2"></div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="md:text-right">
-                <div className="relative animate-[slideInFromLeft_0.5s_ease-out]">
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
                   <div className="hidden md:block absolute right-0 top-6 w-6 h-6 rounded-full bg-black border-4 border-gray-200 transform translate-x-1/2"></div>
                   <div className="bg-gray-100 p-6 rounded-lg shadow-card">
                     <h3 className="text-xl font-bold text-black mb-2">1. Consultation</h3>
@@ -334,11 +493,17 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                       We begin with a detailed consultation to understand your needs, preferences, and the specific requirements of your project.
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
               
               <div className="md:mt-32">
-                <div className="relative animate-[slideInFromRight_0.7s_ease-out]">
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                  viewport={{ once: true }}
+                >
                   <div className="hidden md:block absolute left-0 top-6 w-6 h-6 rounded-full bg-black border-4 border-gray-200 transform -translate-x-1/2"></div>
                   <div className="bg-gray-100 p-6 rounded-lg shadow-card">
                     <h3 className="text-xl font-bold text-black mb-2">2. Design</h3>
@@ -346,11 +511,17 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                       Our designers create detailed plans and sketches, working closely with you to refine the design until it perfectly matches your vision.
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
               
               <div className="md:text-right">
-                <div className="relative animate-[slideInFromLeft_0.9s_ease-out]">
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                  viewport={{ once: true }}
+                >
                   <div className="hidden md:block absolute right-0 top-6 w-6 h-6 rounded-full bg-black border-4 border-gray-200 transform translate-x-1/2"></div>
                   <div className="bg-gray-100 p-6 rounded-lg shadow-card">
                     <h3 className="text-xl font-bold text-black mb-2">3. Fabrication</h3>
@@ -358,11 +529,17 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                       Our skilled craftsmen bring the designs to life in our workshop, using high-quality materials and precise techniques.
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
               
               <div className="md:mt-32">
-                <div className="relative animate-[slideInFromRight_1.1s_ease-out]">
+                <motion.div 
+                  className="relative"
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.9 }}
+                  viewport={{ once: true }}
+                >
                   <div className="hidden md:block absolute left-0 top-6 w-6 h-6 rounded-full bg-black border-4 border-gray-200 transform -translate-x-1/2"></div>
                   <div className="bg-gray-100 p-6 rounded-lg shadow-card">
                     <h3 className="text-xl font-bold text-black mb-2">4. Installation</h3>
@@ -370,15 +547,15 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                       Our professional team handles the installation with care and precision, ensuring a perfect fit and finish.
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Testimonials - with scroll animation */}
-      <section ref={testimonialsRef} className="w-full py-16 px-6 bg-gray-100 opacity-0 translate-y-10 transition-all duration-1000 ease-in-out-expo">
+      {/* <section ref={testimonialsRef} className="w-full py-16 px-6 bg-gray-100 opacity-0 translate-y-10 transition-all duration-1000 ease-in-out-expo">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-black mb-8 text-center">What Our Clients Say</h2>
           
@@ -420,7 +597,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* StickyCard Section */}
       {/* <section className="w-full">
@@ -461,7 +638,8 @@ const stickyContainer = useRef<HTMLDivElement>(null);
           </a>
         </div>
       </section> */}
-    </div>
+      </div>
+    </ReactLenis>
   );
 }
 
