@@ -177,7 +177,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
 
       {/* Our Expertise Section */}
       <motion.section 
-        className="w-full py-16 px-6 -mt-130 lg:-mt-100 bg-white relative z-10"
+        className="w-full py-16 px-6 -mt-140 lg:-mt-100 bg-white relative z-10"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
