@@ -57,7 +57,7 @@ function Contact() {
                   <label htmlFor="message" className="block text-gray-600 mb-1">Message</label>
                   <textarea 
                     id="message" 
-                    rows="4" 
+                    rows = {4} 
                     className="w-full p-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-900"
                     placeholder="How can we help you?"
                   ></textarea>

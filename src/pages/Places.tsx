@@ -1,5 +1,5 @@
 import React from "react";
-import MasonryGallery from './MasonryGallery';
+import MasonryGallery from './MasonryGallery.js';
 
 const imagesSet1 = [
     '/images/swing-1.jpeg',

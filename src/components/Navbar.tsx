@@ -126,8 +126,8 @@ function Navbar() {
                   className={({ isActive }) =>
                     `block px-4 py-3 text-lg text-center rounded-md transition-all duration-300 ease-in-out-expo ${
                       isActive
-                        ? 'bg-gray-100 text-accent font-semibold shadow-card'
-                        : 'text-gray-700 hover:bg-gray-100 hover:text-accent hover:shadow-hover'
+                        ? 'bg-black text-white font-semibold shadow-card'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-black hover:shadow-hover'
                     }`
                   }
                 >
