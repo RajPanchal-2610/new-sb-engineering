@@ -1,9 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../supabaseClient';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
+
+  // Get session on first load
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    };
+
+    fetchSession();
+
+    // Listen for changes in auth state (login/logout)
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      setSession(newSession);
+    });
+
+    // Cleanup
+    return () => {
+      listener.subscription.unsubscribe();
+    };
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -17,9 +39,9 @@ function Navbar() {
 
   return (
     <nav className={`fixed top-0 w-full z-50 shadow-card ${
-      menuOpen ? 'bg-white' : 'bg-black transition-all duration-300 ease-in-out-expo'
+      menuOpen ? 'bg-white' : 'bg-black/90 backdrop-blur-sm transition-all duration-300 ease-in-out-expo'
     }`}>
-      <div className="container mx-auto px-4 sm:px-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16">
         {/* Navbar Top Row (Hidden when menuOpen is true) */}
         {!menuOpen && (
           <motion.div 
@@ -36,16 +58,16 @@ function Navbar() {
             >
               <Link
                 to="/"
-                className="text-xl sm:text-2xl font-bold text-white transition-colors duration-300 px-2"
+                className="text-xl sm:text-2xl lg:text-xl font-bold text-white transition-colors duration-300 px-2"
               >
-                <div className="flex items-center gap-1 sm:gap-2 transform hover:scale-105 transition-transform duration-300 ease-in-out-expo">
-                  <span className="text-base sm:text-xl">New</span>
+                <div className="flex items-center gap-1 sm:gap-2 lg:gap-2 transform hover:scale-105 transition-transform duration-300 ease-in-out-expo">
+                  <span className="text-base sm:text-xl lg:text-lg">New</span>
                   <img
                     src="/images/logo.png"
                     alt="New SB Engineering Logo"
-                    className="h-8 sm:h-10 w-auto"
+                    className="h-8 sm:h-10 lg:h-9 xl:h-10 w-auto"
                   />
-                  <span className="text-base sm:text-xl">Engineering</span>
+                  <span className="text-base sm:text-xl lg:text-lg">Engineering</span>
                 </div>
               </Link>
             </motion.div>
@@ -70,20 +92,21 @@ function Navbar() {
               </svg>
             </motion.button>
 
-{/* Capsule Navigation - Desktop Only */}
+{/* Desktop Navigation */}
 <motion.div 
-  className="hidden md:flex relative items-center space-x-1"
+  className="hidden md:flex relative items-center space-x-4 lg:space-x-5 xl:space-x-6"
   initial={{ opacity: 0, x: 30 }}
   animate={{ opacity: 1, x: 0 }}
   transition={{ duration: 0.5, delay: 0.3 }}
 >
+  {/* Capsule Navigation */}
   <div className="relative flex bg-transparent rounded-full p-0.5">
     {routes.map((path, i) => (
       <NavLink
         key={path}
         to={path}
         className={({ isActive }) =>
-          `relative z-10 px-5 py-1.5 text-sm font-medium rounded-full transition-all duration-300 ease-in-out-expo transform ${
+          `relative z-10 px-5 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium rounded-full transition-all duration-300 ease-in-out-expo transform ${
             isActive
               ? 'text-black'
               : 'text-white hover:scale-125'
@@ -101,6 +124,17 @@ function Navbar() {
       </NavLink>
     ))}
   </div>
+  
+  {/* Conditional Button */}
+  {session ? (
+    <Link to="/admin-panel" className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
+      Admin Panel
+    </Link>
+  ) : (
+    <Link to="/login" className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
+      Login
+    </Link>
+  )}
 </motion.div>
 
 
@@ -179,6 +213,32 @@ function Navbar() {
                   </NavLink>
                 </motion.div>
               ))}
+              
+              {/* Mobile Conditional Button */}
+              <motion.div
+                className="flex justify-center"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: 0.3 + routes.length * 0.1 }}
+              >
+                {session ? (
+                  <Link 
+                    to="/admin-panel"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-block px-8 py-2 text-base text-center bg-blue-600 text-white font-medium rounded-md shadow-card hover:bg-blue-700 transition-all duration-300 ease-in-out-expo"
+                  >
+                    Admin Panel
+                  </Link>
+                ) : (
+                  <Link 
+                    to="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="inline-block px-8 py-2 text-base text-center bg-blue-600 text-white font-medium rounded-md shadow-card hover:bg-blue-700 transition-all duration-300 ease-in-out-expo"
+                  >
+                    Login
+                  </Link>
+                )}
+              </motion.div>
             </div>
           </motion.div>
         )}

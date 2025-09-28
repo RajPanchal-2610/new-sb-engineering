@@ -45,6 +45,7 @@ const StickyCard_001 = ({
   const container = useRef<HTMLDivElement>(null);
 
   const scale = useTransform(progress, range, [1, targetScale]);
+  const opacity = useTransform(progress, [i * 0.25, (i + 1) * 0.25], [1, 0]);
 
   return (
     <div
@@ -54,6 +55,7 @@ const StickyCard_001 = ({
       <motion.div
         style={{
           scale,
+          opacity,
           top: `calc(-5vh + ${i * 20 + 150}px)`,
         }}
         className="rounded-4xl relative flex h-[350px] w-[350px] sm:h-[250px] sm:w-[400px] md:h-[300px] md:w-[500px] lg:h-[350px] lg:w-[600px] xl:h-[400px] xl:w-[700px] origin-center flex-col overflow-hidden"

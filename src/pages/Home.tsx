@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ReactLenis from 'lenis/react';
 import { StickyCard_001 } from '../components/ui/skiper-ui/skiper16';
+import { TextScroll } from '../components/TextScroll';
 
 function Home() {
   // Create refs for sections that will be animated on scroll
@@ -67,15 +68,15 @@ const stickyContainer = useRef<HTMLDivElement>(null);
       <div className="w-full">
       {/* Hero Section with Owner */}
       <motion.section 
-        className="w-full py-16 px-4 sm:px-6 bg-white"
+        className="w-full py-12 px-4 sm:px-6 bg-white"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center justify-between gap-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-start justify-between gap-4 sm:gap-10">
           
           <motion.div 
-            className="w-full md:w-1/2 flex justify-center"
+            className="w-full md:w-1/2 flex flex-col items-center justify-center lg:mb-20"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
@@ -86,65 +87,116 @@ const stickyContainer = useRef<HTMLDivElement>(null);
                 alt="Nilesh Panchal - Owner"
                 className="w-full h-full object-cover object-top transition-transform duration-500 ease-in-out group-hover:-translate-z-20"
               />
+              {/* Name overlapping on image for large devices only */}
+              <div className="hidden lg:block absolute bottom-1 left-1/2 transform -translate-x-1/2 text-center">
+                <div className="bg-black/90 backdrop-blur-sm px-6 py-4 rounded-lg shadow-lg border border-gray-800">
+                  <h3 className="text-2xl font-bold text-white uppercase">Nilesh Panchal</h3>
+                  <p className="text-sm text-gray-300 mt-1">Founder & Owner</p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
           <motion.div 
-            className="w-full md:w-1/2 space-y-5 text-center md:text-left"
+            className="w-full md:w-1/2 space-y-6 text-center md:text-left sm:mt-8"
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
           >
-            <motion.h1 
-              className="text-3xl sm:text-4xl md:text-5xl font-bold"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              New SB Engineering
-            </motion.h1>
-            <motion.h2 
-              className="text-xl sm:text-2xl font-semibold text-gray-800"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              Led by Nilesh R. Panchal
-            </motion.h2>
-            <motion.p 
-              className="text-base sm:text-lg text-gray-700"
+            <div className="space-y-6">
+              <motion.h1 
+                className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-gray-900 via-black via-gray-700 via-gray-800 to-gray-500 bg-clip-text text-transparent leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+              >
+                NEW SB ENGINEERING
+              </motion.h1>
+              
+              <motion.div 
+                className="bg-gradient-to-r from-gray-100 to-gray-50 p-4 rounded-xl border border-gray-200 lg:hidden"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+              >
+                <div className="text-center md:text-left">
+                  <p className="text-sm text-gray-600 mb-1">Founded & Led by</p>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-black bg-gradient-to-r from-gray-900 to-black bg-clip-text text-transparent">
+                    Nilesh R. Panchal
+                  </h2>
+                  <div className="w-16 h-0.5 bg-gradient-to-r from-black to-gray-700 mx-auto md:mx-0 mt-2 rounded-full"></div>
+                </div>
+              </motion.div>
+            </div>
+
+            <motion.div 
+              className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 rounded-2xl border-l-4 border-black shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.0 }}
             >
-              With over 20 years of experience, Nilesh Panchal and his team create custom metal fabrications
-              that combine security, durability, and aesthetic appeal.
-            </motion.p>
-            <motion.p 
-              className="italic text-gray-600 text-base sm:text-lg"
+              <p className="text-lg text-gray-800 font-medium mb-3">
+                <strong>20+ Years</strong> of Excellence in Custom Metal Fabrication
+              </p>
+              <p className="text-base text-gray-700">
+                Crafting bespoke solutions that merge security, durability, and stunning aesthetics for homes and businesses.
+              </p>
+            </motion.div>
+
+            <motion.blockquote 
+              className="border-l-4 border-gray-800 pl-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-r-xl"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.2 }}
             >
-              "My passion has always been creating functional art through metalwork. Every piece we create
-              is designed to not only serve its purpose but to enhance the beauty of your home or business."
-            </motion.p>
+              <p className="text-lg italic text-gray-800 font-medium">
+                "Every piece we create is functional art - designed to serve its purpose while enhancing the beauty of your space."
+              </p>
+              <cite className="text-sm text-gray-700 font-semibold mt-2 block">- Nilesh Panchal, Founder</cite>
+            </motion.blockquote>
+
             <motion.div 
-              className="flex flex-wrap justify-center md:justify-start gap-4 pt-4"
+              className="flex flex-wrap justify-center md:justify-start gap-4 pt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.4 }}
             >
               <a
                 href="/our-work"
-                className="inline-block bg-black text-white hover:bg-gray-800 font-bold py-3 px-6 sm:px-8 rounded-full transition-colors duration-300 shadow-md"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-black to-gray-800 text-white hover:from-gray-800 hover:to-gray-700 font-bold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
-                View Our Work
+                <span>View Our Work</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </a>
             </motion.div>
           </motion.div>
         </div>
       </motion.section>
+
+      {/* Text Scroll Section */}
+      <motion.section 
+        className="w-full py-8 bg-white"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+      >
+        <div className="space-y-4">
+          <TextScroll 
+            text="NEW SB ENGINEERING"
+            default_velocity={2}
+            className="text-5xl md:text-6xl lg:text-7xl font-black text-black uppercase tracking-widest font-sans"
+          />
+          <TextScroll 
+            text="CRAFTING EXCELLENCE • BUILDING DREAMS • ENGINEERING PERFECTION •"
+            default_velocity={-1.5}
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-600 uppercase tracking-wider italic"
+          />
+        </div>
+      </motion.section>
+
 
       <motion.section 
         className="w-full"
@@ -324,7 +376,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, margin: "-100px" }}
       >
-        <div className="max-w-6xl mx-auto px-4 overflow-hidden">
+        <div className="w-full overflow-hidden">
           <h2 className="text-3xl font-bold text-center text-black mb-8">
             Highlights of Our Creations
           </h2>
