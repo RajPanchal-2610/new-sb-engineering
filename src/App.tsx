@@ -2,17 +2,16 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Header from './components/Header.jsx';
-import Footer from './components/Footer.jsx';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Preloader from './components/Preloader';
-import Home from './pages/Home.jsx';
-import About from './pages/About.jsx';
-import Contact from './pages/Contact.jsx';
-import OurWork from './pages/OurWork.jsx';
-import Places from './pages/Places.jsx';
+import Home from './pages/Home';
+import About from './pages/About';
+import OurWork from './pages/OurWork';
+import Places from './pages/Places';
 import type { JSX } from 'react';
-import LoginPage from './pages/LoginPage.js';
-import AdminPanel from './pages/AdminPanel.js';
+import LoginPage from './pages/LoginPage';
+import AdminPanel from './pages/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
