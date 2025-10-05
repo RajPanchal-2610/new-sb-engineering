@@ -1,3 +1,6 @@
+import { analytics } from '../firebase';
+import { logEvent } from 'firebase/analytics';
+
 function Contact() {
   return (
     <div className="w-full bg-gray-100 p-6">
@@ -64,6 +67,7 @@ function Contact() {
                 </div>
                 <button 
                   type="submit" 
+                  onClick={() => logEvent(analytics, 'contact_form_submitted', { source: 'contact_page' })}
                   className="bg-gray-900 hover:bg-accent text-white font-bold py-2 px-4 rounded-md transition-colors duration-300"
                 >
                   Send Message

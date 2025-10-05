@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../supabaseClient';
+import { analytics } from '../firebase';
+import { logEvent } from 'firebase/analytics';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -58,6 +60,7 @@ function Navbar() {
             >
               <Link
                 to="/"
+                onClick={() => logEvent(analytics, 'logo_clicked', { source: 'navbar' })}
                 className="text-xl sm:text-2xl lg:text-xl font-bold text-white transition-colors duration-300 px-2"
               >
                 <div className="flex items-center gap-1 sm:gap-2 lg:gap-2 transform hover:scale-105 transition-transform duration-300 ease-in-out-expo">
@@ -105,6 +108,7 @@ function Navbar() {
       <NavLink
         key={path}
         to={path}
+        onClick={() => logEvent(analytics, 'nav_link_clicked', { page: labels[i], source: 'desktop_nav' })}
         className={({ isActive }) =>
           `relative z-10 px-5 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium rounded-full transition-all duration-300 ease-in-out-expo transform ${
             isActive
@@ -127,11 +131,11 @@ function Navbar() {
   
   {/* Conditional Button */}
   {session ? (
-    <Link to="/admin-panel" className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
+    <Link to="/admin-panel" onClick={() => logEvent(analytics, 'admin_panel_clicked', { source: 'navbar' })} className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
       Admin Panel
     </Link>
   ) : (
-    <Link to="/login" className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
+    <Link to="/login" onClick={() => logEvent(analytics, 'login_clicked', { source: 'navbar' })} className="px-4 py-1.5 lg:px-5 lg:py-1.5 xl:px-6 xl:py-2 text-sm lg:text-sm xl:text-base font-medium text-white bg-blue-600 rounded-full hover:bg-blue-700 transition-all duration-300 ease-in-out-expo transform hover:scale-105">
       Login
     </Link>
   )}
@@ -200,7 +204,10 @@ function Navbar() {
                 >
                   <NavLink
                     to={path}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      logEvent(analytics, 'nav_link_clicked', { page: labels[i], source: 'mobile_nav' });
+                      setMenuOpen(false);
+                    }}
                     className={({ isActive }) =>
                       `block px-4 py-3 text-lg text-center rounded-md transition-all duration-300 ease-in-out-expo ${
                         isActive
@@ -224,7 +231,10 @@ function Navbar() {
                 {session ? (
                   <Link 
                     to="/admin-panel"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      logEvent(analytics, 'admin_panel_clicked', { source: 'mobile_nav' });
+                      setMenuOpen(false);
+                    }}
                     className="inline-block px-8 py-2 text-base text-center bg-blue-600 text-white font-medium rounded-md shadow-card hover:bg-blue-700 transition-all duration-300 ease-in-out-expo"
                   >
                     Admin Panel
@@ -232,7 +242,10 @@ function Navbar() {
                 ) : (
                   <Link 
                     to="/login"
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      logEvent(analytics, 'login_clicked', { source: 'mobile_nav' });
+                      setMenuOpen(false);
+                    }}
                     className="inline-block px-8 py-2 text-base text-center bg-blue-600 text-white font-medium rounded-md shadow-card hover:bg-blue-700 transition-all duration-300 ease-in-out-expo"
                   >
                     Login

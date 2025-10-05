@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { X } from "lucide-react";
 import Zoom from 'react-medium-image-zoom';
 import 'react-medium-image-zoom/dist/styles.css';
+import { Helmet } from 'react-helmet-async';
 import { supabase } from '../supabaseClient';
+import { analytics } from '../firebase';
+import { logEvent } from 'firebase/analytics';
 
 interface Category {
   id: string;
@@ -98,7 +101,18 @@ function OurWork() {
   }
 
   return (
-    <div className="w-full bg-gray-100 p-3 sm:p-6 min-h-screen">
+    <>
+      <Helmet>
+        <title>Our Work - Custom Metal Fabrication Projects | New SB Engineering</title>
+        <meta name="description" content="Explore our portfolio of custom metal fabrication projects including gates, railings, window grills, and architectural metalwork. Quality craftsmanship by New SB Engineering." />
+        <meta name="keywords" content="metal fabrication portfolio, custom gates gallery, railings projects, window grills, metalwork examples, engineering projects" />
+        <meta property="og:title" content="Our Work - Custom Metal Fabrication Projects | New SB Engineering" />
+        <meta property="og:description" content="Explore our portfolio of custom metal fabrication projects. Quality craftsmanship and innovative designs." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://newsbengineering.netlify.app/our-work" />
+      </Helmet>
+      
+      <div className="w-full bg-gray-100 p-3 sm:p-6 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-bold text-gray-900 text-center py-5">Our Work</h1>
 
@@ -107,7 +121,10 @@ function OurWork() {
           {categoryOptions.map(cat => (
             <button
               key={cat.id}
-              onClick={() => handleCategoryChange(cat.id)}
+              onClick={() => {
+                logEvent(analytics, 'category_filter_clicked', { category: cat.name, source: 'our_work_page' });
+                handleCategoryChange(cat.id);
+              }}
               className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
                 activeCategory === cat.id
                   ? 'bg-gray-900 text-white'
@@ -148,7 +165,10 @@ function OurWork() {
                 <div>
                   <button
                     className="w-full bg-gray-900 text-white py-2 sm:py-3 rounded-full text-sm hover:bg-gray-700 transition"
-                    onClick={() => openModal(image.url)}
+                    onClick={() => {
+                      logEvent(analytics, 'project_view_clicked', { project_title: image.title, source: 'our_work_gallery' });
+                      openModal(image.url);
+                    }}
                   >
                     View
                   </button>
@@ -163,7 +183,10 @@ function OurWork() {
             <div className="bg-white text-gray-900 rounded-xl p-4 w-[90%] max-w-xl relative shadow-2xl">
               {/* Close Button */}
               <button
-                onClick={closeModal}
+                onClick={() => {
+                  logEvent(analytics, 'modal_closed', { source: 'our_work_modal' });
+                  closeModal();
+                }}
                 className="absolute top-3 right-3 bg-gray-900 text-white hover:bg-gray-700 rounded-full w-9 h-9 flex items-center justify-center shadow-card"
               >
                 <X className="w-5 h-5" />
@@ -189,7 +212,10 @@ function OurWork() {
         {totalPages > 1 && (
           <div className="flex justify-center items-center mt-12 mb-8 gap-2">
             <button
-              onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+              onClick={() => {
+                logEvent(analytics, 'pagination_clicked', { action: 'previous', page: currentPage - 1, source: 'our_work_page' });
+                setCurrentPage(prev => Math.max(prev - 1, 1));
+              }}
               disabled={currentPage === 1}
               className="px-4 py-2 rounded-lg bg-white text-gray-900 hover:bg-gray-800 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
@@ -199,7 +225,10 @@ function OurWork() {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
-                onClick={() => setCurrentPage(page)}
+                onClick={() => {
+                  logEvent(analytics, 'pagination_clicked', { action: 'page_number', page: page, source: 'our_work_page' });
+                  setCurrentPage(page);
+                }}
                 className={`px-4 py-2 rounded-lg transition-all ${
                   currentPage === page
                     ? 'bg-gray-900 text-white'
@@ -211,7 +240,10 @@ function OurWork() {
             ))}
             
             <button
-              onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+              onClick={() => {
+                logEvent(analytics, 'pagination_clicked', { action: 'next', page: currentPage + 1, source: 'our_work_page' });
+                setCurrentPage(prev => Math.min(prev + 1, totalPages));
+              }}
               disabled={currentPage === totalPages}
               className="px-4 py-2 rounded-lg bg-white text-gray-900 hover:bg-gray-800 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
             >
@@ -226,8 +258,9 @@ function OurWork() {
             <p className="text-gray-600">Try another category or check back soon.</p>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

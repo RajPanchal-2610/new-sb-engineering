@@ -14,6 +14,7 @@ import type { JSX } from 'react';
 import LoginPage from './pages/LoginPage.js';
 import AdminPanel from './pages/AdminPanel.js';
 import ProtectedRoute from './components/ProtectedRoute';
+import AnalyticsTracker from './components/AnalyticsTracker';
 
 function AppContent(): JSX.Element {
   const location = useLocation();
@@ -36,10 +37,11 @@ function AppContent(): JSX.Element {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1.2, delay: 1.8, ease: "easeOut" }}
       > 
+        <AnalyticsTracker />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
+          {/* <Route path="/contact" element={<Contact />} /> */}
           <Route path="/our-work" element={<OurWork />} />
           <Route path="/places" element={<Places />} />
           <Route path="/login" element={<LoginPage />} />

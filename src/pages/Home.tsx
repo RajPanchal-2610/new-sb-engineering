@@ -1,8 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ReactLenis from 'lenis/react';
+import { Helmet } from 'react-helmet-async';
 import { StickyCard_001 } from '../components/ui/skiper-ui/skiper16';
 import { TextScroll } from '../components/TextScroll';
+import { analytics } from '../firebase';
+import { logEvent } from 'firebase/analytics';
 
 function Home() {
   // Create refs for sections that will be animated on scroll
@@ -64,8 +67,23 @@ const stickyContainer = useRef<HTMLDivElement>(null);
   
   
   return (
-    <ReactLenis root>
-      <div className="w-full">
+    <>
+      <Helmet>
+        <title>New SB Engineering - Custom Metal Fabrication & Engineering Solutions</title>
+        <meta name="description" content="New SB Engineering offers 20+ years of expertise in custom metal fabrication, security gates, window grills, railings, and architectural metalwork. Led by Nilesh Panchal." />
+        <meta name="keywords" content="metal fabrication, custom gates, window grills, railings, security gates, architectural metalwork, engineering solutions, Nilesh Panchal" />
+        <meta property="og:title" content="New SB Engineering - Custom Metal Fabrication & Engineering Solutions" />
+        <meta property="og:description" content="Expert metal fabrication services with 20+ years of experience. Custom gates, railings, and architectural metalwork." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://newsbengineering.netlify.app" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="New SB Engineering - Custom Metal Fabrication" />
+        <meta name="twitter:description" content="Expert metal fabrication services with 20+ years of experience." />
+        <link rel="canonical" href="https://newsbengineering.netlify.app" />
+      </Helmet>
+      
+      <ReactLenis root>
+        <div className="w-full">
       {/* Hero Section with Owner */}
       <motion.section 
         className="w-full py-12 px-4 sm:px-6 bg-white"
@@ -163,6 +181,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
             >
               <a
                 href="/our-work"
+                onClick={() => logEvent(analytics, 'view_our_work_clicked', { source: 'hero_section' })}
                 className="inline-flex items-center gap-2 bg-gradient-to-r from-black to-gray-800 text-white hover:from-gray-800 hover:to-gray-700 font-bold py-4 px-8 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <span>View Our Work</span>
@@ -603,8 +622,9 @@ const stickyContainer = useRef<HTMLDivElement>(null);
           </a>
         </div>
       </section> */}
-      </div>
-    </ReactLenis>
+        </div>
+      </ReactLenis>
+    </>
   );
 }
 

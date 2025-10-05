@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 function AnimatedCounter({ end, duration = 2 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0);
@@ -28,7 +29,18 @@ function AnimatedCounter({ end, duration = 2 }: { end: number; duration?: number
 
 function About() {
   return (
-    <div className="w-full bg-gray-100 p-6">
+    <>
+      <Helmet>
+        <title>About Us - New SB Engineering | 20+ Years of Metal Fabrication Excellence</title>
+        <meta name="description" content="Learn about New SB Engineering's 20+ years of experience in custom metal fabrication. Our story, mission, values, and commitment to quality craftsmanship." />
+        <meta name="keywords" content="about New SB Engineering, metal fabrication company, engineering experience, quality craftsmanship, company history, mission values" />
+        <meta property="og:title" content="About Us - New SB Engineering | 20+ Years of Excellence" />
+        <meta property="og:description" content="Discover our story, mission, and 20+ years of experience in custom metal fabrication and engineering solutions." />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://newsbengineering.netlify.app/about" />
+      </Helmet>
+      
+      <div className="w-full bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
         <motion.h1 
           className="text-4xl font-bold text-gray-900 text-center py-5"
@@ -263,8 +275,9 @@ function About() {
             </motion.div>
           </div>
         </motion.div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
