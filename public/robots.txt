@@ -1,0 +1,8 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Disallow: /admin-panel/
+Disallow: /login/
+Allow: /
+
+# Sitemap location
+Sitemap: https://newsbengineering.netlify.app/sitemap.xml
