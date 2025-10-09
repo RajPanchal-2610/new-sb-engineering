@@ -4,6 +4,7 @@ import ReactLenis from 'lenis/react';
 import { Helmet } from 'react-helmet-async';
 import { StickyCard_001 } from '../components/ui/skiper-ui/skiper16';
 import { TextScroll } from '../components/TextScroll';
+import { StructuredData } from '../components/StructuredData';
 import { analytics } from '../firebase';
 import { logEvent } from 'firebase/analytics';
 
@@ -68,6 +69,7 @@ const stickyContainer = useRef<HTMLDivElement>(null);
   
   return (
     <>
+      <StructuredData />
       <Helmet>
         <title>New SB Engineering - Custom Metal Fabrication & Engineering Solutions</title>
         <meta name="description" content="New SB Engineering offers 20+ years of expertise in custom metal fabrication, security gates, window grills, railings, and architectural metalwork. Led by Nilesh Panchal." />
