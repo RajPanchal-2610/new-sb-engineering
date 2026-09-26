@@ -180,14 +180,22 @@ const AdminPanel = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex justify-between items-center mb-2">
             <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-3 py-1.5 sm:px-4 sm:py-2 lg:px-6 lg:py-2 text-sm sm:text-base rounded-lg hover:bg-red-600 transition-colors"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => navigate('/admin/billing')}
+                className="bg-gradient-to-r from-red-600 to-amber-600 text-white px-4 py-2 text-sm sm:text-base font-semibold rounded-lg hover:from-red-700 hover:to-amber-700 transition-all shadow-sm flex items-center gap-2"
+              >
+                <span>Quotations & Invoices</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-gray-800 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base rounded-lg hover:bg-gray-900 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <p className="text-gray-600">Manage your project images and categories</p>
+          <p className="text-gray-600">Manage your project images, categories, quotations, and invoices</p>
         </div>
 
         {/* Category Management */}

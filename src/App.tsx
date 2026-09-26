@@ -12,16 +12,18 @@ import Places from './pages/Places';
 import type { JSX } from 'react';
 import LoginPage from './pages/LoginPage';
 import AdminPanel from './pages/AdminPanel';
+import BillingPage from './pages/BillingPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
 function AppContent(): JSX.Element {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
+  const isBillingPage = location.pathname.includes('/billing');
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      {!isLoginPage && (
+      {!isLoginPage && !isBillingPage && (
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -31,7 +33,7 @@ function AppContent(): JSX.Element {
         </motion.div>
       )}
       <motion.main 
-        className={`flex-grow w-full ${!isLoginPage ? 'mt-16' : ''}`}
+        className={`flex-grow w-full ${!isLoginPage && !isBillingPage ? 'mt-16' : ''}`}
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1.2, delay: 1.8, ease: "easeOut" }}
@@ -52,9 +54,25 @@ function AppContent(): JSX.Element {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/billing"
+            element={
+              <ProtectedRoute>
+                <BillingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/billing"
+            element={
+              <ProtectedRoute>
+                <BillingPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </motion.main>
-      {!isLoginPage && (
+      {!isLoginPage && !isBillingPage && (
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
