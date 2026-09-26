@@ -191,18 +191,6 @@ export const CompanySettingsForm: React.FC<Props> = ({ initialSettings, onSave }
                   )}
                 </div>
                 <p className="text-[11px] text-gray-500">Supports PNG, JPG, SVG or WebP (Max 2MB). Recommended aspect ratio ~ 2:1.</p>
-
-                {/* Optional manual URL input fallback */}
-                <div className="pt-1">
-                  <input
-                    type="text"
-                    name="logo_url"
-                    value={settings.logo_url}
-                    onChange={handleChange}
-                    placeholder="Or enter logo image URL directly (https://...)"
-                    className="w-full px-3.5 py-1.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-xs bg-white"
-                  />
-                </div>
               </div>
             </div>
           </div>

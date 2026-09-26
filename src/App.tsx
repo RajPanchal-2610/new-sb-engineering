@@ -13,6 +13,7 @@ import type { JSX } from 'react';
 import LoginPage from './pages/LoginPage';
 import AdminPanel from './pages/AdminPanel';
 import BillingPage from './pages/BillingPage';
+import PublicDocumentView from './pages/PublicDocumentView';
 import ProtectedRoute from './components/ProtectedRoute';
 import AnalyticsTracker from './components/AnalyticsTracker';
 
@@ -20,10 +21,12 @@ function AppContent(): JSX.Element {
   const location = useLocation();
   const isLoginPage = location.pathname === '/login';
   const isBillingPage = location.pathname.includes('/billing');
+  const isPublicDocView = location.pathname.startsWith('/document/') || location.pathname.startsWith('/view-document/');
+  const hideHeaderFooter = isLoginPage || isBillingPage || isPublicDocView;
 
   return (
     <div className="flex flex-col min-h-screen w-full">
-      {!isLoginPage && !isBillingPage && (
+      {!hideHeaderFooter && (
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -33,7 +36,7 @@ function AppContent(): JSX.Element {
         </motion.div>
       )}
       <motion.main 
-        className={`flex-grow w-full ${!isLoginPage && !isBillingPage ? 'mt-16' : ''}`}
+        className={`flex-grow w-full ${!hideHeaderFooter ? 'mt-16' : ''}`}
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1.2, delay: 1.8, ease: "easeOut" }}
@@ -46,6 +49,8 @@ function AppContent(): JSX.Element {
           <Route path="/our-work" element={<OurWork />} />
           <Route path="/places" element={<Places />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/document/:id" element={<PublicDocumentView />} />
+          <Route path="/view-document/:id" element={<PublicDocumentView />} />
           <Route
             path="/admin-panel"
             element={
@@ -72,7 +77,7 @@ function AppContent(): JSX.Element {
           />
         </Routes>
       </motion.main>
-      {!isLoginPage && !isBillingPage && (
+      {!hideHeaderFooter && (
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

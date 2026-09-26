@@ -57,15 +57,68 @@ export const oklchToRgb = (oklchStr: string): string => {
   return `rgb(${r}, ${g}, ${b_val})`;
 };
 
-export const replaceOklchInString = (str: string): string => {
-  if (!str || !str.includes('oklch')) return str;
-  return str.replace(/oklch\(\s*([0-9.%]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.%]+))?\s*\)/gi, (match) => {
+export const replaceUnsupportedColorsInString = (str: string): string => {
+  if (!str) return str;
+
+  let result = str.replace(/oklch\(\s*([0-9.%]+)\s+([0-9.]+)\s+([0-9.]+)(?:\s*\/\s*([0-9.%]+))?\s*\)/gi, (match) => {
     try {
       return oklchToRgb(match);
     } catch {
-      return match;
+      return 'rgb(31, 41, 55)';
     }
   });
+
+  result = result.replace(/okl[a-z0-9_-]*\([^)]*\)/gi, 'rgb(31, 41, 55)');
+  result = result.replace(/light-dark\([^)]*\)/gi, 'rgb(31, 41, 55)');
+
+  return result;
+};
+
+export const replaceOklchInString = replaceUnsupportedColorsInString;
+
+const sanitizeClonedDocForHtml2Canvas = (clonedDoc: Document) => {
+  const styleTags = Array.from(clonedDoc.querySelectorAll('style'));
+  styleTags.forEach((styleTag) => {
+    if (styleTag.textContent) {
+      styleTag.textContent = replaceUnsupportedColorsInString(styleTag.textContent);
+    }
+  });
+
+  const linkTags = Array.from(clonedDoc.querySelectorAll('link[rel="stylesheet"]'));
+  linkTags.forEach((link) => {
+    link.remove();
+  });
+
+  const container = clonedDoc.getElementById('printable-document') || clonedDoc.body;
+  if (container) {
+    const elements = Array.from(container.querySelectorAll('*')) as HTMLElement[];
+    elements.push(container as HTMLElement);
+
+    elements.forEach((htmlEl) => {
+      const styleAttr = htmlEl.getAttribute('style');
+      if (styleAttr) {
+        htmlEl.setAttribute('style', replaceUnsupportedColorsInString(styleAttr));
+      }
+
+      const computed = clonedDoc.defaultView?.getComputedStyle(htmlEl);
+      if (computed) {
+        ['color', 'backgroundColor', 'borderColor', 'outlineColor', 'fill', 'stroke', 'boxShadow', 'textShadow'].forEach((prop) => {
+          const val = computed.getPropertyValue(prop);
+          if (val && (val.includes('oklch') || val.includes('oklab') || val.includes('oklan') || val.includes('light-dark'))) {
+            const converted = replaceUnsupportedColorsInString(val);
+            if (prop === 'color') htmlEl.style.color = converted;
+            if (prop === 'backgroundColor') htmlEl.style.backgroundColor = converted;
+            if (prop === 'borderColor') htmlEl.style.borderColor = converted;
+            if (prop === 'outlineColor') htmlEl.style.outlineColor = converted;
+            if (prop === 'fill') htmlEl.style.fill = converted;
+            if (prop === 'stroke') htmlEl.style.stroke = converted;
+            if (prop === 'boxShadow') htmlEl.style.boxShadow = converted;
+            if (prop === 'textShadow') htmlEl.style.textShadow = converted;
+          }
+        });
+      }
+    });
+  }
 };
 
 const formatCurrency = (val: number) => {
@@ -76,7 +129,7 @@ const formatCurrency = (val: number) => {
   }).format(val || 0);
 };
 
-// Build HTML markup for off-screen rendering
+// Build HTML markup for off-screen rendering using pure standard inline styles
 const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCodeDataUrl?: string): string => {
   const isQuotation = doc.document_type === 'quotation';
   const docTitle = isQuotation ? 'QUOTATION' : 'TAX INVOICE';
@@ -116,29 +169,29 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
 
   const itemsRows = (doc.items && doc.items.length > 0)
     ? doc.items.map((item, index) => `
-      <tr class="${index % 2 === 0 ? 'bg-white' : 'bg-gray-50/60'}">
-        <td class="py-3 px-3 text-center font-medium text-gray-500">${index + 1}</td>
-        <td class="py-3 px-4 font-semibold text-gray-900 whitespace-pre-wrap">${item.description}</td>
-        ${showHsn ? `<td class="py-3 px-3 text-center text-gray-600">${item.hsn_sac || '-'}</td>` : ''}
-        ${showQty ? `<td class="py-3 px-3 text-right font-medium text-gray-800">${item.quantity ? item.quantity : '-'}</td>` : ''}
-        ${showUnit ? `<td class="py-3 px-3 text-center text-gray-600">${item.unit || '-'}</td>` : ''}
-        ${showRate ? `<td class="py-3 px-3 text-right text-gray-800">${formatCurrency(item.rate)}</td>` : ''}
-        ${showTax ? `<td class="py-3 px-3 text-right text-gray-600">${item.tax_percent}%</td>` : ''}
-        <td class="py-3 px-4 text-right font-bold text-gray-900">${formatCurrency(item.amount)}</td>
+      <tr style="background-color:${index % 2 === 0 ? '#ffffff' : '#f9fafb'}; border-bottom:1px solid #f3f4f6;">
+        <td style="padding:10px; text-align:center; font-weight:500; color:#6b7280;">${index + 1}</td>
+        <td style="padding:10px 12px; font-weight:600; color:#111827; white-space:pre-wrap;">${item.description}</td>
+        ${showHsn ? `<td style="padding:10px; text-align:center; color:#4b5563;">${item.hsn_sac || '-'}</td>` : ''}
+        ${showQty ? `<td style="padding:10px; text-align:right; font-weight:500; color:#1f2937;">${item.quantity ? item.quantity : '-'}</td>` : ''}
+        ${showUnit ? `<td style="padding:10px; text-align:center; color:#4b5563;">${item.unit || '-'}</td>` : ''}
+        ${showRate ? `<td style="padding:10px; text-align:right; color:#1f2937;">${formatCurrency(item.rate)}</td>` : ''}
+        ${showTax ? `<td style="padding:10px; text-align:right; color:#4b5563;">${item.tax_percent}%</td>` : ''}
+        <td style="padding:10px 12px; text-align:right; font-weight:700; color:#111827;">${formatCurrency(item.amount)}</td>
       </tr>
     `).join('')
-    : `<tr><td colSpan="${totalCols}" class="py-6 text-center text-gray-400">No line items added</td></tr>`;
+    : `<tr><td colSpan="${totalCols}" style="padding:24px; text-align:center; color:#9ca3af;">No line items added</td></tr>`;
 
   return `
-    <div className="bg-white p-8 max-w-4xl mx-auto text-gray-800 font-sans" style="background:#fff; padding:32px; font-family:sans-serif; max-width:800px; margin:0 auto; border:1px solid #e5e7eb; border-radius:12px;">
+    <div style="background:#ffffff; padding:32px; font-family:sans-serif; max-width:800px; margin:0 auto; border:1px solid #e5e7eb; border-radius:12px; color:#1f2937;">
       <!-- Header -->
       <div style="display:flex; justify-content:space-between; border-bottom:2px solid #dc2626; padding-bottom:24px; gap:24px;">
         <div>
           <div style="display:flex; align-items:center; gap:14px; margin-bottom:8px;">
             ${company.logo_url ? `
-              <img src="${company.logo_url}" alt="${company.company_name}" style="height:80px; max-width:220px; object-fit:contain; flex-shrink:0;" />
+              <img src="${company.logo_url}" alt="${company.company_name}" style="height:80px; max-width:220px; object-fit:contain; flex-shrink:0; border:2px solid #cbd5e1; border-radius:12px; padding:6px; background:#ffffff;" />
             ` : `
-              <div style="width:48px; height:48px; background:#dc2626; color:#fff; font-weight:900; font-size:24px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">SB</div>
+              <div style="width:48px; height:48px; background:#dc2626; color:#ffffff; font-weight:900; font-size:24px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; border:2px solid #b91c1c;">SB</div>
             `}
             <div>
               <h1 style="font-size:24px; font-weight:900; text-transform:uppercase; color:#111827; margin:0; line-height:1.2;">${company.company_name}</h1>
@@ -198,7 +251,7 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
       </div>
 
       <!-- Bank Details & Totals -->
-      <div style="display:flex; justify:${hasBankDetails ? 'space-between' : 'flex-end'}; gap:32px; margin:24px 0; padding-top:16px; border-top:1px solid #e5e7eb;">
+      <div style="display:flex; justify-content:${hasBankDetails ? 'space-between' : 'flex-end'}; gap:32px; margin:24px 0; padding-top:16px; border-top:1px solid #e5e7eb;">
         <!-- Bank Info -->
         ${hasBankDetails ? `
         <div style="width:55%; font-size:12px; color:#4b5563;">
@@ -254,11 +307,11 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
 
       <!-- Notes & Terms -->
       ${(doc.notes || showTerms) ? `
-      <div style="display:flex; justify:space-between; gap:24px; margin:24px 0; padding-top:16px; border-top:1px solid #e5e7eb; font-size:12px;">
+      <div style="display:flex; justify-content:space-between; gap:24px; margin:24px 0; padding-top:16px; border-top:1px solid #e5e7eb; font-size:12px;">
         ${doc.notes ? `
           <div style="width:${showTerms ? '50%' : '100%'};">
             <h4 style="font-weight:700; color:#1f2937; text-transform:uppercase; font-size:11px; margin:0 0 4px 0;">Notes & Remarks</h4>
-            <p style="color:#4b5563; margin:0; whitespace-pre-wrap;">${doc.notes}</p>
+            <p style="color:#4b5563; margin:0; white-space:pre-wrap;">${doc.notes}</p>
           </div>
         ` : ''}
         ${showTerms ? `
@@ -271,12 +324,12 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
       ` : ''}
 
       <!-- Signatures -->
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; padding-top:48px; margin-top:32px; border-top:1px solid #e5e7eb; font-size:12px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; width:100%; padding-top:48px; margin-top:32px; border-top:1px solid #e5e7eb; font-size:12px;">
         <div style="color:#6b7280;">
           <p style="font-weight:500; color:#374151; margin:0;">Thank you for your business!</p>
           <p style="margin:2px 0 0 0;">Computer Generated ${docTitle}</p>
         </div>
-        <div style="text-align:center;">
+        <div style="text-align:center; margin-left:auto;">
           <p style="font-weight:700; color:#1f2937; margin:0 0 40px 0;">For ${company.company_name}</p>
           <div style="border-top:1px solid #9ca3af; padding-top:4px; width:192px; font-weight:500; color:#4b5563;">
             Authorized Signatory
@@ -287,37 +340,36 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
   `;
 };
 
+const createTempRenderElement = async (doc: BillingDocument, company: CompanySettings): Promise<HTMLElement> => {
+  let qrCodeDataUrl = '';
+  const effectiveUpiId = company.upi_id?.trim() || DEFAULT_COMPANY_SETTINGS.upi_id;
+  const effectiveCompanyName = company.company_name?.trim() || DEFAULT_COMPANY_SETTINGS.company_name;
+
+  if (doc.document_type === 'invoice' && company.show_bank_details !== false && effectiveUpiId) {
+    const upiUrl = buildUpiPaymentUrl({
+      upiId: effectiveUpiId,
+      payeeName: effectiveCompanyName,
+      amount: doc.grand_total,
+      transactionNote: `Invoice ${doc.document_number}`,
+    });
+    qrCodeDataUrl = await generateQrCodeDataUrl(upiUrl, { width: 140, margin: 1 });
+  }
+
+  const tempContainer = window.document.createElement('div');
+  tempContainer.style.position = 'fixed';
+  tempContainer.style.left = '-9999px';
+  tempContainer.style.top = '-9999px';
+  tempContainer.style.width = '800px';
+  tempContainer.style.background = '#ffffff';
+  tempContainer.innerHTML = buildDocumentHTML(doc, company, qrCodeDataUrl);
+  window.document.body.appendChild(tempContainer);
+  return tempContainer.firstElementChild as HTMLElement || tempContainer;
+};
+
 // Main export function to generate PDF directly
 export const generateDocumentPDF = async (doc: BillingDocument, company: CompanySettings): Promise<void> => {
-  let element = window.document.getElementById('printable-document');
-  let isTemp = false;
-  let tempContainer: HTMLElement | null = null;
-
-  if (!element) {
-    isTemp = true;
-    let qrCodeDataUrl = '';
-    const effectiveUpiId = company.upi_id?.trim() || DEFAULT_COMPANY_SETTINGS.upi_id;
-    const effectiveCompanyName = company.company_name?.trim() || DEFAULT_COMPANY_SETTINGS.company_name;
-
-    if (doc.document_type === 'invoice' && company.show_bank_details !== false && effectiveUpiId) {
-      const upiUrl = buildUpiPaymentUrl({
-        upiId: effectiveUpiId,
-        payeeName: effectiveCompanyName,
-        amount: doc.grand_total,
-        transactionNote: `Invoice ${doc.document_number}`,
-      });
-      qrCodeDataUrl = await generateQrCodeDataUrl(upiUrl, { width: 140, margin: 1 });
-    }
-
-    tempContainer = window.document.createElement('div');
-    tempContainer.style.position = 'fixed';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.top = '-9999px';
-    tempContainer.style.width = '800px';
-    tempContainer.innerHTML = buildDocumentHTML(doc, company, qrCodeDataUrl);
-    window.document.body.appendChild(tempContainer);
-    element = tempContainer.firstElementChild as HTMLElement || tempContainer;
-  }
+  const element = await createTempRenderElement(doc, company);
+  const container = element.parentElement || element;
 
   try {
     const canvas = await html2canvas(element, {
@@ -326,45 +378,7 @@ export const generateDocumentPDF = async (doc: BillingDocument, company: Company
       allowTaint: true,
       logging: false,
       backgroundColor: '#ffffff',
-      onclone: (clonedDoc) => {
-        // Clean style tags
-        const styleTags = clonedDoc.querySelectorAll('style');
-        styleTags.forEach((styleTag) => {
-          if (styleTag.textContent && styleTag.textContent.includes('oklch')) {
-            styleTag.textContent = replaceOklchInString(styleTag.textContent);
-          }
-        });
-
-        // Clean inline & computed styles
-        const container = clonedDoc.getElementById('printable-document') || clonedDoc.body;
-        if (container) {
-          const elements = Array.from(container.querySelectorAll('*')) as HTMLElement[];
-          elements.push(container as HTMLElement);
-
-          elements.forEach((htmlEl) => {
-            const styleAttr = htmlEl.getAttribute('style');
-            if (styleAttr && styleAttr.includes('oklch')) {
-              htmlEl.setAttribute('style', replaceOklchInString(styleAttr));
-            }
-
-            const computed = clonedDoc.defaultView?.getComputedStyle(htmlEl);
-            if (computed) {
-              ['color', 'backgroundColor', 'borderColor', 'outlineColor', 'fill', 'stroke'].forEach((prop) => {
-                const val = computed.getPropertyValue(prop);
-                if (val && val.includes('oklch')) {
-                  const converted = replaceOklchInString(val);
-                  if (prop === 'color') htmlEl.style.color = converted;
-                  if (prop === 'backgroundColor') htmlEl.style.backgroundColor = converted;
-                  if (prop === 'borderColor') htmlEl.style.borderColor = converted;
-                  if (prop === 'outlineColor') htmlEl.style.outlineColor = converted;
-                  if (prop === 'fill') htmlEl.style.fill = converted;
-                  if (prop === 'stroke') htmlEl.style.stroke = converted;
-                }
-              });
-            }
-          });
-        }
-      },
+      onclone: (clonedDoc) => sanitizeClonedDocForHtml2Canvas(clonedDoc),
     });
 
     const imgData = canvas.toDataURL('image/png');
@@ -389,8 +403,52 @@ export const generateDocumentPDF = async (doc: BillingDocument, company: Company
     const filename = `${isQuotation ? 'Quotation' : 'Invoice'}_${doc.document_number}.pdf`;
     pdf.save(filename);
   } finally {
-    if (isTemp && tempContainer) {
-      window.document.body.removeChild(tempContainer);
+    if (container && container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+  }
+};
+
+// Export PDF as File object (for native sharing)
+export const generateDocumentPDFFile = async (doc: BillingDocument, company: CompanySettings): Promise<File> => {
+  const element = await createTempRenderElement(doc, company);
+  const container = element.parentElement || element;
+
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      onclone: (clonedDoc) => sanitizeClonedDocForHtml2Canvas(clonedDoc),
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 210;
+    const pageHeight = 297;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    const isQuotation = doc.document_type === 'quotation';
+    const filename = `${isQuotation ? 'Quotation' : 'Invoice'}_${doc.document_number}.pdf`;
+    const blob = pdf.output('blob');
+    return new File([blob], filename, { type: 'application/pdf' });
+  } finally {
+    if (container && container.parentNode) {
+      container.parentNode.removeChild(container);
     }
   }
 };

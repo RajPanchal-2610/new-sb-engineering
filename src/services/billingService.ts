@@ -182,7 +182,7 @@ export const saveDocument = async (document: BillingDocument): Promise<BillingDo
     document_number: headerData.document_number,
     status: headerData.status,
     issue_date: headerData.issue_date,
-    due_date: headerData.due_date || headerData.issue_date || '',
+    due_date: headerData.due_date || null,
     reference_no: headerData.reference_no || '',
     client_name: headerData.client_name || '',
     client_company: headerData.client_company || '',
