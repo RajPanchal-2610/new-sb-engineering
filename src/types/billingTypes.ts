@@ -10,7 +10,6 @@ export interface LineItem {
   quantity?: number | string;
   unit?: string;
   rate: number;
-  discount_percent?: number;
   tax_percent?: number;
   amount: number;
   sort_order?: number;
@@ -57,12 +56,19 @@ export interface BillingDocument {
   client_address: string;
   subtotal: number;
   total_tax: number;
-  total_discount: number;
+  total_discount?: number;
   round_off: number;
   grand_total: number;
   notes: string;
   terms: string;
   converted_from_id?: string;
+  show_bank_details?: boolean;
+  show_terms_and_conditions?: boolean;
+  show_hsn_column?: boolean;
+  show_qty_column?: boolean;
+  show_unit_column?: boolean;
+  show_rate_column?: boolean;
+  show_tax_column?: boolean;
   items: LineItem[];
   created_at?: string;
   updated_at?: string;

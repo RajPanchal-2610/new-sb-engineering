@@ -99,24 +99,24 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
     }
   };
 
-  const showHsn = company.show_hsn_column !== false && document.items?.some(
-    (i) => i.hsn_sac && i.hsn_sac.trim() !== '' && i.hsn_sac !== '-'
-  );
-  const showQty = company.show_qty_column !== false && document.items?.some(
-    (i) => i.quantity !== undefined && i.quantity !== null && String(i.quantity).trim() !== '' && Number(i.quantity) > 0
-  );
-  const showUnit = company.show_unit_column !== false && document.items?.some(
-    (i) => i.unit && i.unit.trim() !== '' && i.unit !== '-'
-  );
-  const showRate = company.show_rate_column !== false;
-  const showTax = company.show_tax_column !== false && document.items?.some(
-    (i) => i.tax_percent !== undefined && i.tax_percent !== null && Number(i.tax_percent) > 0
-  );
+  const prefShowHsn = document.show_hsn_column ?? company.show_hsn_column;
+  const prefShowQty = document.show_qty_column ?? company.show_qty_column;
+  const prefShowUnit = document.show_unit_column ?? company.show_unit_column;
+  const prefShowRate = document.show_rate_column ?? company.show_rate_column;
+  const prefShowTax = document.show_tax_column ?? company.show_tax_column;
+  const prefShowBank = document.show_bank_details ?? company.show_bank_details;
+  const prefShowTerms = document.show_terms_and_conditions ?? company.show_terms_and_conditions;
+
+  const showHsn = prefShowHsn !== false;
+  const showQty = prefShowQty !== false;
+  const showUnit = prefShowUnit !== false;
+  const showRate = prefShowRate !== false;
+  const showTax = prefShowTax !== false;
   const totalCols = 2 + (showHsn ? 1 : 0) + (showQty ? 1 : 0) + (showUnit ? 1 : 0) + (showRate ? 1 : 0) + (showTax ? 1 : 0);
 
   const hasBankDetails = Boolean(
     isInvoice &&
-    company.show_bank_details !== false &&
+    prefShowBank !== false &&
     (
       (company.bank_name && company.bank_name.trim()) ||
       (company.account_number && company.account_number.trim()) ||
@@ -126,7 +126,7 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
     )
   );
 
-  const showTerms = company.show_terms_and_conditions !== false && Boolean(document.terms && document.terms.trim());
+  const showTerms = prefShowTerms !== false && Boolean(document.terms && document.terms.trim());
 
   return (
     <div className="space-y-6">
@@ -242,7 +242,7 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
             </div>
 
             {/* Line Items Table */}
-            <div className="my-6">
+            <div className="my-6 overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-800 text-white text-xs uppercase tracking-wider">
@@ -280,23 +280,23 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
             </div>
 
             {/* Totals Breakdown & Bank Details */}
-            <div className={`my-6 pt-4 border-t border-gray-200 ${hasBankDetails ? 'grid grid-cols-2 gap-8' : 'flex justify-end'}`}>
+            <div className={`my-6 pt-4 border-t border-gray-200 ${hasBankDetails ? 'grid grid-cols-2 gap-3 sm:gap-8' : 'flex justify-end'}`}>
               {/* Bank & Payment Info */}
               {hasBankDetails && (
                 <div className="space-y-4 text-xs text-gray-600">
-                  <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-row items-center justify-between gap-4">
-                    <div className="space-y-1 flex-1">
-                      <h4 className="font-bold text-gray-800 uppercase tracking-wider text-[11px] mb-2">Bank Payment Details</h4>
-                      {company.bank_name && <p><span className="font-medium text-gray-700">Bank Name:</span> {company.bank_name}</p>}
-                      {company.account_number && <p><span className="font-medium text-gray-700">Account No:</span> {company.account_number}</p>}
-                      {company.ifsc_code && <p><span className="font-medium text-gray-700">IFSC Code:</span> {company.ifsc_code}</p>}
-                      {company.branch && <p><span className="font-medium text-gray-700">Branch:</span> {company.branch}</p>}
-                      {effectiveUpiId && <p className="font-semibold text-red-600 pt-1">UPI ID: {effectiveUpiId}</p>}
+                  <div className="p-2.5 sm:p-4 bg-gray-50 rounded-xl border border-gray-100 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-3">
+                    <div className="space-y-1 flex-1 w-full">
+                      <h4 className="font-bold text-gray-800 uppercase tracking-wider text-[10px] sm:text-[11px] mb-1 sm:mb-2">Bank Payment Details</h4>
+                      {company.bank_name && <p className="text-[11px] sm:text-xs"><span className="font-medium text-gray-700">Bank:</span> {company.bank_name}</p>}
+                      {company.account_number && <p className="text-[11px] sm:text-xs"><span className="font-medium text-gray-700">A/c No:</span> {company.account_number}</p>}
+                      {company.ifsc_code && <p className="text-[11px] sm:text-xs"><span className="font-medium text-gray-700">IFSC:</span> {company.ifsc_code}</p>}
+                      {company.branch && <p className="text-[11px] sm:text-xs"><span className="font-medium text-gray-700">Branch:</span> {company.branch}</p>}
+                      {effectiveUpiId && <p className="font-semibold text-red-600 pt-0.5 text-[11px] sm:text-xs">UPI: {effectiveUpiId}</p>}
                     </div>
                     {qrDataUrl && (
-                      <div className="flex flex-col items-center bg-white p-2 rounded-lg border border-gray-200 shadow-xs shrink-0">
-                        <img src={qrDataUrl} alt="Scan to Pay via UPI" className="w-24 h-24 object-contain" />
-                        <span className="text-[10px] font-semibold text-gray-600 mt-1">Scan & Pay via UPI</span>
+                      <div className="flex flex-col items-center bg-white p-1.5 sm:p-2 rounded-lg border border-gray-200 shadow-xs shrink-0 text-center w-full sm:w-auto">
+                        <img src={qrDataUrl} alt="Scan to Pay via UPI" className="w-16 h-16 sm:w-24 sm:h-24 object-contain" />
+                        <span className="text-[9px] sm:text-[10px] font-bold text-gray-700 mt-0.5">Scan to Pay</span>
                       </div>
                     )}
                   </div>
@@ -309,13 +309,6 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
                   <span className="text-gray-600 font-medium">Subtotal:</span>
                   <span className="font-semibold text-gray-800">{formatCurrency(document.subtotal)}</span>
                 </div>
-
-                {document.total_discount > 0 && (
-                  <div className="flex justify-between py-1 border-b border-gray-100 text-red-600">
-                    <span>Discount:</span>
-                    <span>- {formatCurrency(document.total_discount)}</span>
-                  </div>
-                )}
 
                 {document.total_tax > 0 && (
                   <div className="flex justify-between py-1 border-b border-gray-100">

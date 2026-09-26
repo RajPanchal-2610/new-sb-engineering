@@ -192,12 +192,18 @@ export const saveDocument = async (document: BillingDocument): Promise<BillingDo
     client_address: headerData.client_address || '',
     subtotal: Number(headerData.subtotal) || 0,
     total_tax: Number(headerData.total_tax) || 0,
-    total_discount: Number(headerData.total_discount) || 0,
     round_off: Number(headerData.round_off) || 0,
     grand_total: Number(headerData.grand_total) || 0,
     notes: headerData.notes || '',
     terms: headerData.terms || '',
     converted_from_id: headerData.converted_from_id || null,
+    show_bank_details: headerData.show_bank_details !== false,
+    show_terms_and_conditions: headerData.show_terms_and_conditions !== false,
+    show_hsn_column: headerData.show_hsn_column !== false,
+    show_qty_column: headerData.show_qty_column !== false,
+    show_unit_column: headerData.show_unit_column !== false,
+    show_rate_column: headerData.show_rate_column !== false,
+    show_tax_column: headerData.show_tax_column !== false,
     updated_at: now,
   };
 
@@ -233,18 +239,19 @@ export const saveDocument = async (document: BillingDocument): Promise<BillingDo
   }
 
   if (items && items.length > 0 && savedDocId) {
-    const itemPayloads = items.map((it, idx) => ({
-      document_id: savedDocId,
-      description: it.description,
-      hsn_sac: it.hsn_sac || '',
-      quantity: Number(it.quantity) || 1,
-      unit: it.unit || 'Pcs',
-      rate: Number(it.rate) || 0,
-      discount_percent: Number(it.discount_percent) || 0,
-      tax_percent: Number(it.tax_percent) || 0,
-      amount: Number(it.amount) || 0,
-      sort_order: idx,
-    }));
+    const itemPayloads = items.map((it, idx) => {
+      return {
+        document_id: savedDocId,
+        description: it.description,
+        hsn_sac: it.hsn_sac || '',
+        quantity: Number(it.quantity) || 1,
+        unit: headerData.show_unit_column !== false ? (it.unit || '') : '',
+        rate: Number(it.rate) || 0,
+        tax_percent: Number(it.tax_percent) || 0,
+        amount: Number(it.amount) || 0,
+        sort_order: idx,
+      };
+    });
 
     const { error: itemsError } = await supabase.from('billing_items').insert(itemPayloads);
     if (itemsError) {
@@ -317,7 +324,6 @@ export const convertQuotationToInvoice = async (quotationId: string): Promise<Bi
     client_address: quotation.client_address || '',
     subtotal: quotation.subtotal || 0,
     total_tax: quotation.total_tax || 0,
-    total_discount: quotation.total_discount || 0,
     round_off: quotation.round_off || 0,
     grand_total: quotation.grand_total || 0,
     notes: quotation.notes || '',

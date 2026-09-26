@@ -47,6 +47,7 @@ export const DocumentForm: React.FC<Props> = ({
       : (companySettings.show_terms_and_conditions !== false ? companySettings.default_terms : '')
   );
 
+  // Overall Discount
   // Items
   const [items, setItems] = useState<LineItem[]>(
     initialDocument?.items?.length
@@ -55,11 +56,10 @@ export const DocumentForm: React.FC<Props> = ({
           {
             description: '',
             hsn_sac: '',
-            quantity: 1,
-            unit: 'Pcs',
+            quantity: companySettings.show_qty_column !== false ? 1 : '',
+            unit: companySettings.show_unit_column !== false ? 'Pcs' : '',
             rate: 0,
-            discount_percent: 0,
-            tax_percent: 18,
+            tax_percent: companySettings.show_tax_column !== false ? 18 : 0,
             amount: 0,
           },
         ]
@@ -99,16 +99,17 @@ export const DocumentForm: React.FC<Props> = ({
     return isNaN(num) || num === 0 ? 1 : num;
   };
 
-  const calculateItemAmount = (qtyVal: any, rateVal: any, discVal: any, taxVal: any) => {
+  const calculateItemAmount = (
+    qtyVal: any,
+    rateVal: any,
+    taxVal: any
+  ) => {
     const qtyMultiplier = getQtyMultiplier(qtyVal);
     const rate = Number(rateVal) || 0;
-    const disc = Number(discVal) || 0;
     const tax = Number(taxVal) || 0;
-
     const base = qtyMultiplier * rate;
-    const afterDisc = base - (base * disc) / 100;
-    const taxAmount = (afterDisc * tax) / 100;
-    return Math.round((afterDisc + taxAmount) * 100) / 100;
+    const taxAmount = (base * tax) / 100;
+    return Math.round((base + taxAmount) * 100) / 100;
   };
 
   const handleItemChange = (index: number, field: keyof LineItem, value: any) => {
@@ -123,7 +124,6 @@ export const DocumentForm: React.FC<Props> = ({
       current.amount = calculateItemAmount(
         showQtyCol ? current.quantity : 1,
         current.rate,
-        current.discount_percent,
         showTaxCol ? current.tax_percent : 0
       );
     }
@@ -140,7 +140,6 @@ export const DocumentForm: React.FC<Props> = ({
         quantity: showQtyCol ? 1 : '',
         unit: showUnitCol ? 'Pcs' : '',
         rate: 0,
-        discount_percent: 0,
         tax_percent: showTaxCol ? 18 : 0,
         amount: 0,
       },
@@ -160,25 +159,15 @@ export const DocumentForm: React.FC<Props> = ({
     return acc + qty * rate;
   }, 0);
 
-  const totalDiscount = items.reduce((acc, item) => {
-    if (!showRateCol) return acc;
-    const qty = showQtyCol ? getQtyMultiplier(item.quantity) : 1;
-    const rate = Number(item.rate) || 0;
-    const disc = Number(item.discount_percent) || 0;
-    return acc + (qty * rate * disc) / 100;
-  }, 0);
-
   const totalTax = items.reduce((acc, item) => {
     if (!showTaxCol) return acc;
     const qty = showQtyCol ? getQtyMultiplier(item.quantity) : 1;
     const rate = showRateCol ? (Number(item.rate) || 0) : (Number(item.amount) || 0);
-    const disc = showRateCol ? (Number(item.discount_percent) || 0) : 0;
     const tax = Number(item.tax_percent) || 0;
-    const taxableAmount = qty * rate - (qty * rate * disc) / 100;
-    return acc + (taxableAmount * tax) / 100;
+    return acc + (qty * rate * tax) / 100;
   }, 0);
 
-  const unroundedTotal = subtotal - totalDiscount + totalTax;
+  const unroundedTotal = subtotal + totalTax;
   const grandTotal = Math.round(unroundedTotal);
   const roundOff = Math.round((grandTotal - unroundedTotal) * 100) / 100;
 
@@ -198,11 +187,17 @@ export const DocumentForm: React.FC<Props> = ({
     client_address: clientAddress,
     subtotal: Math.round(subtotal * 100) / 100,
     total_tax: Math.round(totalTax * 100) / 100,
-    total_discount: Math.round(totalDiscount * 100) / 100,
     round_off: roundOff,
     grand_total: grandTotal,
     notes,
     terms,
+    show_bank_details: initialDocument?.show_bank_details ?? (companySettings.show_bank_details !== false),
+    show_terms_and_conditions: initialDocument?.show_terms_and_conditions ?? (companySettings.show_terms_and_conditions !== false),
+    show_hsn_column: initialDocument?.show_hsn_column ?? showHsnCol,
+    show_qty_column: initialDocument?.show_qty_column ?? showQtyCol,
+    show_unit_column: initialDocument?.show_unit_column ?? showUnitCol,
+    show_rate_column: initialDocument?.show_rate_column ?? showRateCol,
+    show_tax_column: initialDocument?.show_tax_column ?? showTaxCol,
     ...(initialDocument?.converted_from_id ? { converted_from_id: initialDocument.converted_from_id } : {}),
     items,
     ...(initialDocument?.created_at ? { created_at: initialDocument.created_at } : {}),
@@ -444,7 +439,148 @@ export const DocumentForm: React.FC<Props> = ({
           </button>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile Line Items Cards (sm:hidden) */}
+        <div className="sm:hidden space-y-4">
+          {items.map((item, index) => (
+            <div key={index} className="p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3 relative">
+              <div className="flex items-center justify-between border-b border-gray-200 pb-2">
+                <span className="font-bold text-gray-800 text-xs flex items-center gap-1.5">
+                  <span className="w-5 h-5 bg-red-600 text-white rounded-full flex items-center justify-center text-[10px]">
+                    {index + 1}
+                  </span>
+                  Item #{index + 1}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveItem(index)}
+                  disabled={items.length === 1}
+                  className="p-1 text-gray-400 hover:text-red-600 disabled:opacity-30 rounded transition"
+                  title="Remove Item"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-semibold text-gray-600 mb-1">Description *</label>
+                <input
+                  type="text"
+                  value={item.description}
+                  onChange={(e) => handleItemChange(index, 'description', e.target.value)}
+                  placeholder="e.g. Fabrication of Heavy MS Structural Frame"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-1 focus:ring-red-500 text-xs bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                {showHsnCol && (
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">HSN/SAC</label>
+                    <input
+                      type="text"
+                      value={item.hsn_sac || ''}
+                      onChange={(e) => handleItemChange(index, 'hsn_sac', e.target.value)}
+                      placeholder="Optional"
+                      className="w-full px-2.5 py-1.5 border border-gray-300 rounded-lg text-xs bg-white"
+                    />
+                  </div>
+                )}
+
+                {showQtyCol && (
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">Quantity</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      placeholder="0"
+                      value={item.quantity ?? ''}
+                      onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                      className="w-full px-2.5 py-1.5 border border-gray-300 rounded-lg text-xs bg-white text-right"
+                    />
+                  </div>
+                )}
+
+                {showUnitCol && (
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">Unit</label>
+                    <select
+                      value={item.unit || ''}
+                      onChange={(e) => handleItemChange(index, 'unit', e.target.value)}
+                      className="w-full px-2 py-1.5 border border-gray-300 rounded-lg text-xs bg-white"
+                    >
+                      <option value="">- None -</option>
+                      <option value="Pcs">Pcs</option>
+                      <option value="Nos">Nos</option>
+                      <option value="Mtr">Mtr</option>
+                      <option value="Sq.Ft">Sq.Ft</option>
+                      <option value="Kg">Kg</option>
+                      <option value="Ton">Ton</option>
+                      <option value="Set">Set</option>
+                      <option value="Hrs">Hrs</option>
+                      <option value="Lot">Lot</option>
+                    </select>
+                  </div>
+                )}
+
+                {showRateCol && (
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">Rate (₹)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      value={item.rate}
+                      onChange={(e) => handleItemChange(index, 'rate', e.target.value)}
+                      className="w-full px-2.5 py-1.5 border border-gray-300 rounded-lg text-xs bg-white text-right"
+                    />
+                  </div>
+                )}
+
+                {showTaxCol && (
+                  <div>
+                    <label className="block text-[11px] font-semibold text-gray-600 mb-1">GST %</label>
+                    <select
+                      value={item.tax_percent}
+                      onChange={(e) => handleItemChange(index, 'tax_percent', e.target.value)}
+                      className="w-full px-2 py-1.5 border border-gray-300 rounded-lg text-xs bg-white text-right"
+                    >
+                      <option value={0}>0%</option>
+                      <option value={5}>5%</option>
+                      <option value={12}>12%</option>
+                      <option value={18}>18%</option>
+                      <option value={28}>28%</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                <span className="text-xs font-bold text-gray-700">Total Amount:</span>
+                <span className="text-sm font-black text-gray-900">
+                  {showRateCol ? (
+                    `₹${item.amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}`
+                  ) : (
+                    <input
+                      type="number"
+                      min="0"
+                      step="any"
+                      value={item.amount || ''}
+                      onChange={(e) => handleItemChange(index, 'amount', e.target.value)}
+                      placeholder="0.00"
+                      required
+                      className="w-32 px-2.5 py-1.5 border border-gray-300 rounded-lg text-right font-bold text-xs bg-white"
+                    />
+                  )}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop Line Items Table (hidden sm:block) */}
+        <div className="hidden sm:block overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[500px]">
             <thead>
               <tr className="bg-gray-100 text-gray-700 text-xs uppercase tracking-wider">
@@ -454,7 +590,6 @@ export const DocumentForm: React.FC<Props> = ({
                 {showQtyCol && <th className="py-2.5 px-2 w-20 text-right">Qty</th>}
                 {showUnitCol && <th className="py-2.5 px-2 w-24">Unit</th>}
                 {showRateCol && <th className="py-2.5 px-2 w-28 text-right">Rate (₹)</th>}
-                {showRateCol && <th className="py-2.5 px-2 w-20 text-right">Disc %</th>}
                 {showTaxCol && <th className="py-2.5 px-2 w-20 text-right">GST %</th>}
                 <th className="py-2.5 px-3 w-36 text-right">Amount (₹) *</th>
                 <th className="py-2.5 px-2 w-10 text-center"></th>
@@ -530,19 +665,6 @@ export const DocumentForm: React.FC<Props> = ({
                       />
                     </td>
                   )}
-                  {showRateCol && (
-                    <td className="py-2 px-2">
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="any"
-                        value={item.discount_percent}
-                        onChange={(e) => handleItemChange(index, 'discount_percent', e.target.value)}
-                        className="w-full px-2 py-1.5 border border-gray-300 rounded text-right text-xs"
-                      />
-                    </td>
-                  )}
                   {showTaxCol && (
                     <td className="py-2 px-2">
                       <select
@@ -598,12 +720,7 @@ export const DocumentForm: React.FC<Props> = ({
             <span>Subtotal:</span>
             <span className="font-semibold text-gray-800">₹{subtotal.toFixed(2)}</span>
           </div>
-          {totalDiscount > 0 && (
-            <div className="flex justify-between text-red-600">
-              <span>Total Discount:</span>
-              <span>- ₹{totalDiscount.toFixed(2)}</span>
-            </div>
-          )}
+
           <div className="flex justify-between text-gray-600">
             <span>Total GST / Tax:</span>
             <span className="font-semibold text-gray-800">₹{totalTax.toFixed(2)}</span>

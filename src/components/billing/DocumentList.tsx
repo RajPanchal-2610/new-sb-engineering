@@ -144,156 +144,270 @@ export const DocumentList: React.FC<Props> = ({
         </div>
       </div>
 
-      {/* Documents Table */}
+      {/* Documents List - Mobile Cards & Desktop Table */}
       {filteredDocs.length > 0 ? (
-        <div className="overflow-x-auto border border-gray-200 rounded-xl">
-          <table className="w-full text-left border-collapse min-w-[800px]">
-            <thead>
-              <tr className="bg-gray-50 text-gray-700 text-xs uppercase tracking-wider border-b border-gray-200">
-                <th className="py-3 px-4">Document #</th>
-                <th className="py-3 px-4">Type</th>
-                <th className="py-3 px-4">Client</th>
-                <th className="py-3 px-4">Date</th>
-                <th className="py-3 px-4 text-right">Amount</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 text-xs">
-              {filteredDocs.map((doc) => {
-                const isQuotation = doc.document_type === 'quotation';
-                return (
-                  <tr key={doc.id} className="hover:bg-gray-50/80 transition group">
-                    {/* Doc Number */}
-                    <td className="py-3 px-4 font-bold text-gray-900 font-mono">
+        <div>
+          {/* Mobile Card View (sm:hidden) */}
+          <div className="sm:hidden space-y-3">
+            {filteredDocs.map((doc) => {
+              const isQuotation = doc.document_type === 'quotation';
+              return (
+                <div key={doc.id} className="p-4 bg-white rounded-xl border border-gray-200 shadow-xs space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
                       <button
                         onClick={() => onSelect(doc)}
-                        className="hover:text-red-600 underline decoration-red-300 underline-offset-4"
+                        className="font-bold text-gray-900 font-mono text-sm hover:text-red-600 block text-left"
                       >
                         {doc.document_number}
                       </button>
-                    </td>
-
-                    {/* Type Badge */}
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-block text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-md border ${
-                          isQuotation
-                            ? 'bg-amber-50 text-amber-800 border-amber-200'
-                            : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                        }`}
-                      >
-                        {doc.document_type}
-                      </span>
-                    </td>
-
-                    {/* Client */}
-                    <td className="py-3 px-4">
-                      <div className="font-semibold text-gray-900">{doc.client_name}</div>
+                      <div className="font-semibold text-gray-800 text-xs mt-0.5">{doc.client_name}</div>
                       {doc.client_company && (
                         <div className="text-[11px] text-gray-500">{doc.client_company}</div>
                       )}
-                    </td>
+                    </div>
+                    <span
+                      className={`inline-block text-[10px] font-bold uppercase px-2 py-0.5 rounded-md border ${
+                        isQuotation
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                      }`}
+                    >
+                      {doc.document_type}
+                    </span>
+                  </div>
 
-                    {/* Date */}
-                    <td className="py-3 px-4 text-gray-600 whitespace-nowrap">{doc.issue_date}</td>
+                  <div className="flex justify-between items-center text-xs pt-2 border-t border-gray-100">
+                    <span className="text-gray-500">{doc.issue_date}</span>
+                    <span className="font-bold text-gray-900 font-mono text-sm">{formatCurrency(doc.grand_total)}</span>
+                  </div>
 
-                    {/* Amount */}
-                    <td className="py-3 px-4 text-right font-bold text-gray-900 font-mono">
-                      {formatCurrency(doc.grand_total)}
-                    </td>
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 gap-2">
+                    <select
+                      value={doc.status}
+                      onChange={(e) => onStatusChange(doc, e.target.value)}
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border cursor-pointer ${
+                        doc.status === 'paid'
+                          ? 'bg-green-100 text-green-800 border-green-300'
+                          : doc.status === 'accepted'
+                          ? 'bg-blue-100 text-blue-800 border-blue-300'
+                          : doc.status === 'sent'
+                          ? 'bg-purple-100 text-purple-800 border-purple-300'
+                          : doc.status === 'cancelled'
+                          ? 'bg-red-100 text-red-800 border-red-300'
+                          : 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                      }`}
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="sent">Sent</option>
+                      <option value="accepted">Accepted</option>
+                      <option value="paid">Paid</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
 
-                    {/* Status Dropdown */}
-                    <td className="py-3 px-4 text-center">
-                      <select
-                        value={doc.status}
-                        onChange={(e) => onStatusChange(doc, e.target.value)}
-                        className={`text-[11px] font-bold uppercase px-2 py-1 rounded-full border cursor-pointer ${
-                          doc.status === 'paid'
-                            ? 'bg-green-100 text-green-800 border-green-300'
-                            : doc.status === 'accepted'
-                            ? 'bg-blue-100 text-blue-800 border-blue-300'
-                            : doc.status === 'sent'
-                            ? 'bg-purple-100 text-purple-800 border-purple-300'
-                            : doc.status === 'cancelled'
-                            ? 'bg-red-100 text-red-800 border-red-300'
-                            : 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                        }`}
+                    <div className="flex items-center gap-1">
+                      {isQuotation && (
+                        <button
+                          onClick={() => onConvert(doc)}
+                          title="Convert to Invoice"
+                          className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
+                        >
+                          <ArrowRight className="w-4 h-4" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => onSelect(doc)}
+                        title="View Preview"
+                        className="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
                       >
-                        <option value="draft">Draft</option>
-                        <option value="sent">Sent</option>
-                        <option value="accepted">Accepted</option>
-                        <option value="paid">Paid</option>
-                        <option value="cancelled">Cancelled</option>
-                      </select>
-                    </td>
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDirectDownload(doc)}
+                        disabled={downloadingId === doc.id}
+                        title="Download PDF"
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onShare(doc)}
+                        title="Share"
+                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                      >
+                        <Share2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => onEdit(doc)}
+                        title="Edit"
+                        className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => doc.id && onDelete(doc.id)}
+                        title="Delete"
+                        className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-                    {/* Actions */}
-                    <td className="py-3 px-4 text-center">
-                      <div className="flex items-center justify-center gap-1.5">
-                        {/* Convert Quotation to Invoice */}
-                        {isQuotation && (
-                          <button
-                            onClick={() => onConvert(doc)}
-                            title="Convert to Invoice"
-                            className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
-                          >
-                            <ArrowRight className="w-4 h-4" />
-                          </button>
-                        )}
-
-                        {/* View Preview Page */}
+          {/* Desktop Table View (hidden sm:block) */}
+          <div className="hidden sm:block overflow-x-auto border border-gray-200 rounded-xl">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+              <thead>
+                <tr className="bg-gray-50 text-gray-700 text-xs uppercase tracking-wider border-b border-gray-200">
+                  <th className="py-3 px-4">Document #</th>
+                  <th className="py-3 px-4">Type</th>
+                  <th className="py-3 px-4">Client</th>
+                  <th className="py-3 px-4">Date</th>
+                  <th className="py-3 px-4 text-right">Amount</th>
+                  <th className="py-3 px-4 text-center">Status</th>
+                  <th className="py-3 px-4 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 text-xs">
+                {filteredDocs.map((doc) => {
+                  const isQuotation = doc.document_type === 'quotation';
+                  return (
+                    <tr key={doc.id} className="hover:bg-gray-50/80 transition group">
+                      {/* Doc Number */}
+                      <td className="py-3 px-4 font-bold text-gray-900 font-mono">
                         <button
                           onClick={() => onSelect(doc)}
-                          title="View Preview"
-                          className="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                          className="hover:text-red-600 underline decoration-red-300 underline-offset-4"
                         >
-                          <Eye className="w-4 h-4" />
+                          {doc.document_number}
                         </button>
+                      </td>
 
-                        {/* Direct PDF Download */}
-                        <button
-                          onClick={() => handleDirectDownload(doc)}
-                          disabled={downloadingId === doc.id}
-                          title="Download PDF directly"
-                          className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+                      {/* Type Badge */}
+                      <td className="py-3 px-4">
+                        <span
+                          className={`inline-block text-[11px] font-bold uppercase px-2.5 py-0.5 rounded-md border ${
+                            isQuotation
+                              ? 'bg-amber-50 text-amber-800 border-amber-200'
+                              : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          }`}
                         >
-                          <Download className="w-4 h-4" />
-                        </button>
+                          {doc.document_type}
+                        </span>
+                      </td>
 
-                        {/* Share */}
-                        <button
-                          onClick={() => onShare(doc)}
-                          title="Share"
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        >
-                          <Share2 className="w-4 h-4" />
-                        </button>
+                      {/* Client */}
+                      <td className="py-3 px-4">
+                        <div className="font-semibold text-gray-900">{doc.client_name}</div>
+                        {doc.client_company && (
+                          <div className="text-[11px] text-gray-500">{doc.client_company}</div>
+                        )}
+                      </td>
 
-                        {/* Edit */}
-                        <button
-                          onClick={() => onEdit(doc)}
-                          title="Edit"
-                          className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                        </button>
+                      {/* Date */}
+                      <td className="py-3 px-4 text-gray-600 whitespace-nowrap">{doc.issue_date}</td>
 
-                        {/* Delete */}
-                        <button
-                          onClick={() => onDelete(doc.id!)}
-                          title="Delete"
-                          className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
+                      {/* Amount */}
+                      <td className="py-3 px-4 text-right font-bold text-gray-900 font-mono">
+                        {formatCurrency(doc.grand_total)}
+                      </td>
+
+                      {/* Status Dropdown */}
+                      <td className="py-3 px-4 text-center">
+                        <select
+                          value={doc.status}
+                          onChange={(e) => onStatusChange(doc, e.target.value)}
+                          className={`text-[11px] font-bold uppercase px-2 py-1 rounded-full border cursor-pointer ${
+                            doc.status === 'paid'
+                              ? 'bg-green-100 text-green-800 border-green-300'
+                              : doc.status === 'accepted'
+                              ? 'bg-blue-100 text-blue-800 border-blue-300'
+                              : doc.status === 'sent'
+                              ? 'bg-purple-100 text-purple-800 border-purple-300'
+                              : doc.status === 'cancelled'
+                              ? 'bg-red-100 text-red-800 border-red-300'
+                              : 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                          }`}
                         >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                          <option value="draft">Draft</option>
+                          <option value="sent">Sent</option>
+                          <option value="accepted">Accepted</option>
+                          <option value="paid">Paid</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-3 px-4 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
+                          {/* Convert Quotation to Invoice */}
+                          {isQuotation && (
+                            <button
+                              onClick={() => onConvert(doc)}
+                              title="Convert to Invoice"
+                              className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
+                            >
+                              <ArrowRight className="w-4 h-4" />
+                            </button>
+                          )}
+
+                          {/* View Preview Page */}
+                          <button
+                            onClick={() => onSelect(doc)}
+                            title="View Preview"
+                            className="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </button>
+
+                          {/* Direct PDF Download */}
+                          <button
+                            onClick={() => handleDirectDownload(doc)}
+                            disabled={downloadingId === doc.id}
+                            title="Download PDF directly"
+                            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
+                          >
+                            <Download className="w-4 h-4" />
+                          </button>
+
+                          {/* Share */}
+                          <button
+                            onClick={() => onShare(doc)}
+                            title="Share"
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+                          >
+                            <Share2 className="w-4 h-4" />
+                          </button>
+
+                          {/* Edit */}
+                          <button
+                            onClick={() => onEdit(doc)}
+                            title="Edit"
+                            className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+
+                          {/* Delete */}
+                          <button
+                            onClick={() => doc.id && onDelete(doc.id)}
+                            title="Delete"
+                            className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">

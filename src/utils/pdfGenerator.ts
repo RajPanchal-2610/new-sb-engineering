@@ -134,19 +134,19 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
   const isQuotation = doc.document_type === 'quotation';
   const docTitle = isQuotation ? 'QUOTATION' : 'TAX INVOICE';
 
-  const showHsn = company.show_hsn_column !== false && doc.items?.some(
-    (i) => i.hsn_sac && i.hsn_sac.trim() !== '' && i.hsn_sac !== '-'
-  );
-  const showQty = company.show_qty_column !== false && doc.items?.some(
-    (i) => i.quantity !== undefined && i.quantity !== null && String(i.quantity).trim() !== '' && Number(i.quantity) > 0
-  );
-  const showUnit = company.show_unit_column !== false && doc.items?.some(
-    (i) => i.unit && i.unit.trim() !== '' && i.unit !== '-'
-  );
-  const showRate = company.show_rate_column !== false;
-  const showTax = company.show_tax_column !== false && doc.items?.some(
-    (i) => i.tax_percent !== undefined && i.tax_percent !== null && Number(i.tax_percent) > 0
-  );
+  const prefShowHsn = doc.show_hsn_column ?? company.show_hsn_column;
+  const prefShowQty = doc.show_qty_column ?? company.show_qty_column;
+  const prefShowUnit = doc.show_unit_column ?? company.show_unit_column;
+  const prefShowRate = doc.show_rate_column ?? company.show_rate_column;
+  const prefShowTax = doc.show_tax_column ?? company.show_tax_column;
+  const prefShowBank = doc.show_bank_details ?? company.show_bank_details;
+  const prefShowTerms = doc.show_terms_and_conditions ?? company.show_terms_and_conditions;
+
+  const showHsn = prefShowHsn !== false;
+  const showQty = prefShowQty !== false;
+  const showUnit = prefShowUnit !== false;
+  const showRate = prefShowRate !== false;
+  const showTax = prefShowTax !== false;
   const totalCols = 2 + (showHsn ? 1 : 0) + (showQty ? 1 : 0) + (showUnit ? 1 : 0) + (showRate ? 1 : 0) + (showTax ? 1 : 0);
 
   const isInvoice = doc.document_type === 'invoice';
@@ -155,7 +155,7 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
 
   const hasBankDetails = Boolean(
     isInvoice &&
-    company.show_bank_details !== false &&
+    prefShowBank !== false &&
     (
       (company.bank_name && company.bank_name.trim()) ||
       (company.account_number && company.account_number.trim()) ||
@@ -165,7 +165,7 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
     )
   );
 
-  const showTerms = company.show_terms_and_conditions !== false && Boolean(doc.terms && doc.terms.trim());
+  const showTerms = prefShowTerms !== false && Boolean(doc.terms && doc.terms.trim());
 
   const itemsRows = (doc.items && doc.items.length > 0)
     ? doc.items.map((item, index) => `
@@ -280,12 +280,6 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
             <span style="color:#4b5563; font-weight:500;">Subtotal:</span>
             <span style="font-weight:600; color:#1f2937;">${formatCurrency(doc.subtotal)}</span>
           </div>
-          ${doc.total_discount > 0 ? `
-            <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f3f4f6; color:#dc2626;">
-              <span>Discount:</span>
-              <span>- ${formatCurrency(doc.total_discount)}</span>
-            </div>
-          ` : ''}
           ${doc.total_tax > 0 ? `
             <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #f3f4f6;">
               <span style="color:#4b5563; font-weight:500;">GST / Taxes:</span>
