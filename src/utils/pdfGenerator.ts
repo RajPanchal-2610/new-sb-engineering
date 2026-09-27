@@ -183,8 +183,16 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
     : `<tr><td colSpan="${totalCols}" style="padding:24px; text-align:center; color:#9ca3af;">No line items added</td></tr>`;
 
   return `
-    <div style="background:#ffffff; padding:32px; font-family:sans-serif; max-width:800px; margin:0 auto; border:1px solid #e5e7eb; border-radius:12px; color:#1f2937;">
-      <!-- Header -->
+    <div style="position:relative; overflow:hidden; background:#ffffff; padding:32px; font-family:sans-serif; max-width:800px; margin:0 auto; border:1px solid #e5e7eb; border-radius:12px; color:#1f2937;">
+      <!-- Background Watermark -->
+      <div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:0; overflow:hidden;">
+        <span style="font-size:52px; font-weight:900; text-transform:uppercase; letter-spacing:0.12em; color:rgba(31, 41, 55, 0.04); transform:rotate(-35deg); text-align:center; white-space:nowrap; user-select:none;">
+          ${company.company_name || 'New SB Engineering'}
+        </span>
+      </div>
+
+      <div style="position:relative; z-index:10;">
+        <!-- Header -->
       <div style="display:flex; justify-content:space-between; border-bottom:2px solid #dc2626; padding-bottom:24px; gap:24px;">
         <div>
           <div style="display:flex; align-items:center; gap:14px; margin-bottom:8px;">
@@ -331,6 +339,7 @@ const buildDocumentHTML = (doc: BillingDocument, company: CompanySettings, qrCod
         </div>
       </div>
     </div>
+  </div>
   `;
 };
 

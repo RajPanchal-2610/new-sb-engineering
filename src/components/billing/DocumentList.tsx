@@ -152,15 +152,16 @@ export const DocumentList: React.FC<Props> = ({
             {filteredDocs.map((doc) => {
               const isQuotation = doc.document_type === 'quotation';
               return (
-                <div key={doc.id} className="p-4 bg-white rounded-xl border border-gray-200 shadow-xs space-y-3">
+                <div
+                  key={doc.id}
+                  onClick={() => onSelect(doc)}
+                  className="p-4 bg-white rounded-xl border border-gray-200 shadow-xs space-y-3 cursor-pointer hover:border-red-200 transition"
+                >
                   <div className="flex justify-between items-start">
                     <div>
-                      <button
-                        onClick={() => onSelect(doc)}
-                        className="font-bold text-gray-900 font-mono text-sm hover:text-red-600 block text-left"
-                      >
+                      <span className="font-bold text-gray-900 font-mono text-sm hover:text-red-600 block text-left">
                         {doc.document_number}
-                      </button>
+                      </span>
                       <div className="font-semibold text-gray-800 text-xs mt-0.5">{doc.client_name}</div>
                       {doc.client_company && (
                         <div className="text-[11px] text-gray-500">{doc.client_company}</div>
@@ -182,21 +183,21 @@ export const DocumentList: React.FC<Props> = ({
                     <span className="font-bold text-gray-900 font-mono text-sm">{formatCurrency(doc.grand_total)}</span>
                   </div>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 gap-2">
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100 gap-2" onClick={(e) => e.stopPropagation()}>
                     <select
                       value={doc.status}
+                      onClick={(e) => e.stopPropagation()}
                       onChange={(e) => onStatusChange(doc, e.target.value)}
-                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border cursor-pointer ${
-                        doc.status === 'paid'
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border cursor-pointer ${doc.status === 'paid'
                           ? 'bg-green-100 text-green-800 border-green-300'
                           : doc.status === 'accepted'
-                          ? 'bg-blue-100 text-blue-800 border-blue-300'
-                          : doc.status === 'sent'
-                          ? 'bg-purple-100 text-purple-800 border-purple-300'
-                          : doc.status === 'cancelled'
-                          ? 'bg-red-100 text-red-800 border-red-300'
-                          : 'bg-yellow-100 text-yellow-800 border-yellow-300'
-                      }`}
+                            ? 'bg-blue-100 text-blue-800 border-blue-300'
+                            : doc.status === 'sent'
+                              ? 'bg-purple-100 text-purple-800 border-purple-300'
+                              : doc.status === 'cancelled'
+                                ? 'bg-red-100 text-red-800 border-red-300'
+                                : 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                        }`}
                     >
                       <option value="draft">Draft</option>
                       <option value="sent">Sent</option>
@@ -208,7 +209,7 @@ export const DocumentList: React.FC<Props> = ({
                     <div className="flex items-center gap-1">
                       {isQuotation && (
                         <button
-                          onClick={() => onConvert(doc)}
+                          onClick={(e) => { e.stopPropagation(); onConvert(doc); }}
                           title="Convert to Invoice"
                           className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition"
                         >
@@ -216,14 +217,14 @@ export const DocumentList: React.FC<Props> = ({
                         </button>
                       )}
                       <button
-                        onClick={() => onSelect(doc)}
+                        onClick={(e) => { e.stopPropagation(); onSelect(doc); }}
                         title="View Preview"
                         className="p-1.5 text-gray-600 hover:bg-gray-100 rounded-lg transition"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => handleDirectDownload(doc)}
+                        onClick={(e) => { e.stopPropagation(); handleDirectDownload(doc); }}
                         disabled={downloadingId === doc.id}
                         title="Download PDF"
                         className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition disabled:opacity-50"
@@ -231,21 +232,21 @@ export const DocumentList: React.FC<Props> = ({
                         <Download className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => onShare(doc)}
+                        onClick={(e) => { e.stopPropagation(); onShare(doc); }}
                         title="Share"
                         className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition"
                       >
                         <Share2 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => onEdit(doc)}
+                        onClick={(e) => { e.stopPropagation(); onEdit(doc); }}
                         title="Edit"
                         className="p-1.5 text-amber-600 hover:bg-amber-50 rounded-lg transition"
                       >
                         <Edit2 className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => doc.id && onDelete(doc.id)}
+                        onClick={(e) => { e.stopPropagation(); doc.id && onDelete(doc.id); }}
                         title="Delete"
                         className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition"
                       >
@@ -276,15 +277,16 @@ export const DocumentList: React.FC<Props> = ({
                 {filteredDocs.map((doc) => {
                   const isQuotation = doc.document_type === 'quotation';
                   return (
-                    <tr key={doc.id} className="hover:bg-gray-50/80 transition group">
+                    <tr
+                      key={doc.id}
+                      onClick={() => onSelect(doc)}
+                      className="hover:bg-gray-100/80 transition group cursor-pointer"
+                    >
                       {/* Doc Number */}
                       <td className="py-3 px-4 font-bold text-gray-900 font-mono">
-                        <button
-                          onClick={() => onSelect(doc)}
-                          className="hover:text-red-600 underline decoration-red-300 underline-offset-4"
-                        >
+                        <span className="hover:text-red-600 underline decoration-red-300 underline-offset-4">
                           {doc.document_number}
-                        </button>
+                        </span>
                       </td>
 
                       {/* Type Badge */}
@@ -317,7 +319,7 @@ export const DocumentList: React.FC<Props> = ({
                       </td>
 
                       {/* Status Dropdown */}
-                      <td className="py-3 px-4 text-center">
+                      <td className="py-3 px-4 text-center" onClick={(e) => e.stopPropagation()}>
                         <select
                           value={doc.status}
                           onChange={(e) => onStatusChange(doc, e.target.value)}
@@ -342,7 +344,7 @@ export const DocumentList: React.FC<Props> = ({
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3 px-4 text-center">
+                      <td className="py-3 px-4 text-center" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-center gap-1.5">
                           {/* Convert Quotation to Invoice */}
                           {isQuotation && (

@@ -330,6 +330,13 @@ export const convertQuotationToInvoice = async (quotationId: string): Promise<Bi
     terms: quotation.terms || '',
     items: quotation.items || [],
     converted_from_id: quotation.id || quotationId,
+    ...(quotation.show_bank_details !== undefined ? { show_bank_details: quotation.show_bank_details } : {}),
+    ...(quotation.show_terms_and_conditions !== undefined ? { show_terms_and_conditions: quotation.show_terms_and_conditions } : {}),
+    ...(quotation.show_hsn_column !== undefined ? { show_hsn_column: quotation.show_hsn_column } : {}),
+    ...(quotation.show_qty_column !== undefined ? { show_qty_column: quotation.show_qty_column } : {}),
+    ...(quotation.show_unit_column !== undefined ? { show_unit_column: quotation.show_unit_column } : {}),
+    ...(quotation.show_rate_column !== undefined ? { show_rate_column: quotation.show_rate_column } : {}),
+    ...(quotation.show_tax_column !== undefined ? { show_tax_column: quotation.show_tax_column } : {}),
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   };

@@ -179,10 +179,17 @@ export const DocumentPreview: React.FC<Props> = ({ document, company, onBack, on
               transformOrigin: 'top left',
               transition: 'transform 0.15s ease-out',
             }}
-            className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 text-gray-800 font-sans print:shadow-none print:border-none print:p-0 print:transform-none print:w-full"
+            className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 text-gray-800 font-sans print:shadow-none print:border-none print:p-0 print:transform-none print:w-full relative overflow-hidden"
           >
+            {/* Background Watermark */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0 overflow-hidden">
+              <span className="text-gray-900/[0.04] font-black text-6xl sm:text-7xl uppercase tracking-widest -rotate-45 text-center whitespace-nowrap">
+                {company.company_name || 'New SB Engineering'}
+              </span>
+            </div>
+
             {/* Document Header */}
-            <div className="flex flex-row justify-between border-b-2 border-red-600 pb-6 gap-6">
+            <div className="relative z-10 flex flex-row justify-between border-b-2 border-red-600 pb-6 gap-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-3.5 mb-2">
                   {company.logo_url ? (
